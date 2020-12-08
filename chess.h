@@ -23,3 +23,6 @@ void initialiseBoard();
 void print_debug_chessboard();
 
 char* findPiece(int num);
+
+bool canPawnMove(int row1, int col1, int row2, int col2);
+bool isValidMove(int row1, int col1, int row2, int col2);
