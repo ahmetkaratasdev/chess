@@ -69,10 +69,21 @@ int main(void) {
         printf("%s %s to %s\n", colour, findPiece(chessboard[row1][col1].piece), pos2);
         // check if it's a valid move.
         if (isValidMove(row1, col1, row2, col2)) {
+            if (chessboard[row1][col1].canEmpassant) {
+                int i = 0;
+                if (chessboard[row1][col1].colour == WHITE) i = 1;
+                else if (chessboard[row1][col1].colour == BLACK) i = -1;
+                chessboard[row2 - i][col2].piece = NONE;
+                chessboard[row2 - i][col2].colour = ZERO;
+                chessboard[row2 - i][col2].canEmpassant = NO;
+                chessboard[row2 - i][col2].hasPieceMoved = NO;
+            }
             chessboard[row2][col2] = chessboard[row1][col1];
             chessboard[row2][col2].hasPieceMoved = YES;
             chessboard[row1][col1].piece = NONE;
             chessboard[row1][col1].colour = ZERO;
+            chessboard[row1][col1].hasPieceMoved = NO;
+
 
         } else {
             printf("The attempted move is not allowed\n");
@@ -127,8 +138,6 @@ kill the opposing piece and take its spot
 */
 bool canPawnMove(int row1, int col1, int row2, int col2) {
     // if the pawn 
-
-    int piece = chessboard[row2][col2].piece;
     int colour = chessboard[row1][col1].colour;
     int hasPieceMoved = chessboard[row1][col1].hasPieceMoved;
     int i = 0;
@@ -165,9 +174,9 @@ bool canPawnMove(int row1, int col1, int row2, int col2) {
             }
         }
         return false;
-    } else if (row2 == row1 + i && col2 == col1 + i && piece == PAWN) {             // if it wants to kill an opponent
+    } else if (row2 == row1 + i && col2 == col1 + i) {             // if it wants to kill an opponent
         return true;
-    } else if (row2 == row1 + i && col2 == col1 - i && piece == PAWN) {             // if it wants to kill an opponent
+    } else if (row2 == row1 + i && col2 == col1 - i) {             // if it wants to kill an opponent
         return true;
     } else {
         return false;
