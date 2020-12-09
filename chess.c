@@ -36,13 +36,18 @@ bool canPawnMove(int row1, int col1, int row2, int col2) {
     int colour = chessboard[row1][col1].colour;
     int hasPieceMoved = chessboard[row1][col1].hasPieceMoved;
     int i = 0;
-    
     if (colour == WHITE) i = 1;
     else if (colour == BLACK) i = -1;
 
     // if dest is empty and it's the same column
     if (chessboard[row1][col1].canEmpassant) {                      // if it can empassant
-        return true;
+        // for black
+        if (row2 == row1 + i) {
+            if (col2 == col1 + i || col2 == col1 - i) {
+                return true;
+            }
+        }
+        return false;
     } else if (chessboard[row2][col2].piece == NONE && col1 == col2) { 
         if (abs(row2 - row1) == 1) {                                 // if the pawn wants to move up 1 position
             chessboard[row1][col1].canEmpassant = NO;
