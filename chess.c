@@ -113,8 +113,8 @@ bool canRookMove(int row1, int col1, int row2, int col2) {
             }
             return true;
         }
-    } else if (chessboard[row2][col2].piece == KING && chessboardrow2][col2].pie) {
-
+    } else if (chessboard[row2][col2].piece == KING && chessboard[row2][col2].piece) {
+        return true;
     }
     return true;
 }
