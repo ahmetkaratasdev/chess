@@ -1,28 +1,77 @@
+#ifndef CHESS_H
+#define CHESS_H
 // A .h file which contains all the prototypes for the functions in chess.c
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <stdbool.h>
 
-// checks if the move from square1 to square2 is a valid move
-// int isValidMove(int row1, int col1, int row2, int col2);
 
-/* A pawn can do one of three things:
-1. If it hasn't moved before, it can move either 1 or two squares forward depending on
-whether an opposing piece is blocking the square or not
-2. If the opponent moved a PAWN two pieces forward from the start such that it is
-directly horizontal with the current user's PAWN, then the user's pawn can travel diagonally 
-behind the opponent pawn, killing the pawn.
-3. If an opposing piece is diagonally infront of the pawn by one square, then it may
-kill the opposing piece and take its spot
-// */
-// int canPawnMove(int row1, int col1, int row2, int col2);
+#define SIZE 8
+#define NO 0
+#define YES 1
 
-// int canRookMove(int row1, int col1, int row2, int col2);
+enum chessPiece {
+    NONE = 0,
+    PAWN,
+    ROOK,
+    KNIGHT,
+    BISHOP,
+    QUEEN,
+    KING,
+};
 
-// initialises the chess board
+enum colour {
+    ZERO = 0,
+    WHITE = 1,
+    BLACK = 2,
+};
+
+struct board {
+    enum chessPiece piece;
+    enum colour colour;
+    int hasPieceMoved;
+    int canEmpassant;
+};
+// declare the chessboard
+struct board chessboard[SIZE][SIZE];
+
+/**
+ * initialises the chess board 
+**/ 
 void initialiseBoard();
 
-// Prints the chessboard for debugging
+/**
+ * Prints the chessboard for debugging
+**/ 
 void print_debug_chessboard();
 
+/**
+ * Finds the piece which corresponds to the value on the square
+**/ 
 char* findPiece(int num);
 
+/**
+ * Checks if pawn can move to destination 2.
+ * 1. If it hasn't moved before, it can move either 1 or two squares forward depending on
+ * whether an opposing piece is blocking the square or not
+ * 2. If the opponent moved a PAWN two pieces forward from the start such that it is
+ * directly horizontal with the current user's PAWN, then the user's pawn can travel diagonally 
+ * behind the opponent pawn, killing the pawn.
+ * 3. If an opposing piece is diagonally infront of the pawn by one square, then it may
+ * kill the opposing piece and take its spot
+**/ 
 bool canPawnMove(int row1, int col1, int row2, int col2);
+
+/**
+ * checks if the rook can move to row2, col2.
+ * 1. Rook can move vertically or horizontally.
+ * 2. Rook can castle with King
+**/ 
+bool canRookMove(int row1, int col1, int row2, int col2);
+/**
+ * checks if the move is valid 
+**/ 
 bool isValidMove(int row1, int col1, int row2, int col2);
+
+#endif

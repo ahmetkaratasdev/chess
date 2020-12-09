@@ -5,108 +5,11 @@
 #include <stdlib.h>
 #include <string.h>
 #include <stdbool.h>
-#include "chess.h"
+#include "chess.h" // The reason we need this is because 
+// we need to put the function declarations at the top. However
+// it needs to 
 // The size of the starting grid
-#define SIZE 8
-#define NO 0
-#define YES 1
-// #define WHITE 1
-// #define BLACK 2
-// #define NIGHT 3.1
-// #define BISHOP 3.2
-// #define ROOK 5
-// #define PAWN 1
-// #define QUEEN 9
-// #define KING 3.5
 
-enum chessPiece {
-    NONE = 0,
-    PAWN,
-    ROOK,
-    KNIGHT,
-    BISHOP,
-    QUEEN,
-    KING,
-};
-
-enum colour {
-    ZERO = 0,
-    WHITE = 1,
-    BLACK = 2,
-};
-
-
-struct board {
-    enum chessPiece piece;
-    enum colour colour;
-    int hasPieceMoved;
-    int canEmpassant;
-};
-
-struct board chessboard[SIZE][SIZE];
-
-// void initialiseBoard();
-// void print_debug_chessboard();
-// void diagonal(int row, int col);
-// char* findPiece(int num);
-
-
-int main(void) {
-    // int chessboard[SIZE][SIZE];
-    // struct board chessboard[SIZE][SIZE];
-    initialiseBoard();
-    print_debug_chessboard();
-
-    char pos1[4], pos2[4];
-    int row1, col1, row2, col2;
-    while (1) {
-        scanf("%s %s", pos1, pos2);
-        col1 = pos1[0] - 'a', row1 = atoi(&pos1[1]) - 1;
-        col2 = pos2[0] - 'a', row2 = atoi(&pos2[1]) - 1;
-        char colour[10] = "NONE";
-        if (chessboard[row1][col1].colour == WHITE) strcpy(colour, "White");
-        else if (chessboard[row1][col1].colour == BLACK) strcpy(colour, "Black");
-        printf("%s %s to %s\n", colour, findPiece(chessboard[row1][col1].piece), pos2);
-        // check if it's a valid move.
-        if (isValidMove(row1, col1, row2, col2)) {
-            if (chessboard[row1][col1].canEmpassant) {
-                int i = 0;
-                if (chessboard[row1][col1].colour == WHITE) i = 1;
-                else if (chessboard[row1][col1].colour == BLACK) i = -1;
-                chessboard[row2 - i][col2].piece = NONE;
-                chessboard[row2 - i][col2].colour = ZERO;
-                chessboard[row2 - i][col2].canEmpassant = NO;
-                chessboard[row2 - i][col2].hasPieceMoved = NO;
-            }
-            chessboard[row2][col2] = chessboard[row1][col1];
-            chessboard[row2][col2].hasPieceMoved = YES;
-            chessboard[row1][col1].piece = NONE;
-            chessboard[row1][col1].colour = ZERO;
-            chessboard[row1][col1].hasPieceMoved = NO;
-
-
-        } else {
-            printf("The attempted move is not allowed\n");
-
-        }
-        print_debug_chessboard();
-
-    }
-
-    
-    
-    // printf("%d %d\n", row1, row1);
-    // int bishopFound = 0;
-    // for (int row = 0; row < SIZE && !bishopFound; row++) {
-    //     for (int col = 0; col < SIZE && !bishopFound; col++) {
-    //         if (chessboard[row][col].piece == BISHOP) {
-    //             diagonal(row, col);
-    //             bishopFound = 1;
-    //         }
-    //     }
-    // }
-    
-}
 bool isValidMove(int row1, int col1, int row2, int col2) {
     int piece = chessboard[row1][col1].piece;
     if (piece == PAWN) {
@@ -127,15 +30,7 @@ bool isValidMove(int row1, int col1, int row2, int col2) {
     //     return 0;
     // }
 }
-/* A pawn can do one of three things:
-1. If it hasn't moved before, it can move either 1 or two squares forward depending on
-whether an opposing piece is blocking the square or not
-1. If 1he opponent moved a PAWN two pieces forward from the start such that it is
-1irect1y horizontal with the current user's PAWN, then the user's pawn can travel diagonally 
-behind the opponent pawn, killing the pawn.
-3. If an opposing piece is diagonally infront of the pawn by one square, then it may
-kill the opposing piece and take its spot
-*/
+
 bool canPawnMove(int row1, int col1, int row2, int col2) {
     // if the pawn 
     int colour = chessboard[row1][col1].colour;
@@ -181,12 +76,49 @@ bool canPawnMove(int row1, int col1, int row2, int col2) {
     } else {
         return false;
     }
-
-
-
     return false;
 }
-// Initialise the entire board positions to zero's 
+bool canRookMove(int row1, int col1, int row2, int col2) {
+    // if the rook wants to travel vertically
+    int row, col;
+    if (col1 == col2) {     // if vertical
+        if (row2 > row1) {
+            for (row = row1; row < row2; row++) {
+                if (chessboard[row][col1].piece != NONE) {                        // if any of the positions before destination 
+                    return false;                                           // is not empty, then return false
+                }       
+            }
+            return true;
+        } else if (row2 < row1) {
+            for (row = row2; row > row1; row--) {
+                if (chessboard[row][col1].piece != NONE) {                        // if any of the positions before destination 
+                    return false;                                           // is not empty, then return false
+                }       
+            }
+            return true;
+        }
+    } else if (row1 == row2) {  // if horizontal
+        if (col2 > col1) {
+            for (col = col1; col < col2; col++) {
+                if (chessboard[row1][col].piece != NONE) {
+                    return false;
+                }
+            }
+            return true;
+        } else if (col2 < col1) {
+            for (col = col1; col > col2; col++) {
+                if (chessboard[row1][col].piece != NONE) {
+                    return false;
+                }
+            }
+            return true;
+        }
+    } else if (chessboard[row2][col2].piece == KING && chessboardrow2][col2].pie) {
+
+    }
+    return true;
+}
+// Initialise the entire board positions to zero's and the rest of the struct
 void initialiseBoard() {
     printf("Position: %d\n", chessboard[0][0].piece);
     int matrix[SIZE][SIZE] = {
@@ -231,11 +163,6 @@ void print_debug_chessboard() {
         printf("\n");
     }
 }
-
-// int checkmate() {
-
-// }
-
 // void diagonal(int row, int col) {
 //     int i, topRight = 0, topLeft = 0, bottomRight = 0, bottomLeft = 0;
 //     // top left
