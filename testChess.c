@@ -6,7 +6,7 @@
 
 int main(void) {
     // int chessboard[SIZE][SIZE];
-    // struct board chessboard[SIZE][SIZE];
+    // struct board* chessboard[SIZE][SIZE];
     initialiseBoard();
     print_debug_chessboard();
 
@@ -17,26 +17,25 @@ int main(void) {
         col1 = pos1[0] - 'a', row1 = atoi(&pos1[1]) - 1;
         col2 = pos2[0] - 'a', row2 = atoi(&pos2[1]) - 1;
         char colour[10] = "NONE";
-        if (chessboard[row1][col1].colour == WHITE) strcpy(colour, "White");
-        else if (chessboard[row1][col1].colour == BLACK) strcpy(colour, "Black");
-        printf("%s %s to %s\n", colour, findPiece(chessboard[row1][col1].piece), pos2);
+        struct board position1 = chessboard[row1][col1];
+        struct board position2 = chessboard[row2][col2];
+        // struct canEmpassant* empassant = position1.empassant;
+        int colour1 = position1.colour;
+        if (colour1 == WHITE) {
+            strcpy(colour, "White");
+        } else if (colour1 == BLACK) {
+            strcpy(colour, "Black");
+        }
+        printf("%s %s to %s\n", colour, findPiece(position1.piece), pos2);
+
         // check if it's a valid move.
         if (isValidMove(row1, col1, row2, col2)) {
-            if (chessboard[row1][col1].canEmpassant) {
-                int i = 0;
-                if (chessboard[row1][col1].colour == WHITE) i = 1;
-                else if (chessboard[row1][col1].colour == BLACK) i = -1;
-                chessboard[row2 - i][col2].piece = NONE;
-                chessboard[row2 - i][col2].colour = ZERO;
-                chessboard[row2 - i][col2].canEmpassant = NO;
-                chessboard[row2 - i][col2].hasPieceMoved = NO;
+            if (position1.empassant.answer == YES) {                              // if the pawn can empassant
+                resetPosition(row1, col2);
             }
-            chessboard[row2][col2] = chessboard[row1][col1];
-            chessboard[row2][col2].hasPieceMoved = YES;
-            chessboard[row1][col1].piece = NONE;
-            chessboard[row1][col1].colour = ZERO;
-            chessboard[row1][col1].hasPieceMoved = NO;
-
+            position2 = position1;
+            position2.hasPieceMoved = YES;
+            resetPosition(row1, col1);
 
         } else {
             printf("The attempted move is not allowed\n");

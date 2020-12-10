@@ -1,7 +1,7 @@
 CC = gcc					# Defines the compiler as GCC
 CFLAGS = -Wall -Werror
-testChess: testChess.o chess.o
-	$(CC) $(CFLAGS) testChess.o chess.o -o testChess
+output: testChess.o chess.o
+	$(CC) $(CFLAGS) testChess.o chess.o -o output
 
 chess.o: chess.c chess.h
 	$(CC) $(CFLAGS) chess.c -c -o chess.o

@@ -27,12 +27,19 @@ enum colour {
     BLACK = 2,
 };
 
+struct canEmpassant {
+    int answer;
+    int empassantWithRow;
+    int empassantWithCol;
+};
+
 struct board {
     enum chessPiece piece;
     enum colour colour;
     int hasPieceMoved;
-    int canEmpassant;
+    struct canEmpassant empassant;
 };
+
 // declare the chessboard
 struct board chessboard[SIZE][SIZE];
 
@@ -51,6 +58,8 @@ void print_debug_chessboard();
 **/ 
 char* findPiece(int num);
 
+void resetPosition(int row, int col);
+
 /**
  * Checks if pawn can move to destination 2.
  * 1. If it hasn't moved before, it can move either 1 or two squares forward depending on
@@ -62,13 +71,13 @@ char* findPiece(int num);
  * kill the opposing piece and take its spot
 **/ 
 bool canPawnMove(int row1, int col1, int row2, int col2);
-
+void canAdjacentPawnEmpassant(int colour, int row2, int col2);
 /**
  * checks if the rook can move to row2, col2.
  * 1. Rook can move vertically or horizontally.
  * 2. Rook can castle with King
 **/ 
-bool canRookMove(int row1, int col1, int row2, int col2);
+// bool canRookMove(int row1, int col1, int row2, int col2);
 /**
  * checks if the move is valid 
 **/ 
