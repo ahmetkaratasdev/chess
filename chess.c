@@ -156,27 +156,28 @@ void initialiseBoard() {
     // };
     for (int row = 0; row < SIZE; row++) {
         for (int col = 0; col < SIZE; col++) {
-            struct board position = chessboard[row][col];
-            position.piece = 0;
-
-
-    //         if (row == 0 || row == SIZE - 1) {
-    //             if (col <= 4) position.piece = col + 2;
-    //             else if (col > 4) position.piece = SIZE - col + 1;
+            struct board* position = &chessboard[row][col];
+            if (row == 0 || row == SIZE - 1) {
+                if (col <= 4) position->piece = col + 2;
+                else if (col > 4) position->piece = SIZE - col + 1;
                 
-    //             if (row == 0) position.piece = WHITE;
-    //             else if (row == SIZE - 1) position.piece = BLACK;
-    //         } else if (row == 1 || row == SIZE - 2) {
-    //             position.piece = 1;
-    //             if (row == 1) position.colour = WHITE;
-    //             else if (row == SIZE - 2) position.colour = BLACK;
-    //         } else {
-    //             position.piece = 0;
-    //             position.colour = ZERO;
-    //         }
-            // position.hasPieceMoved = NO;
-            // position.empassant = NULL;
+                if (row == 0) position->piece = WHITE;
+                else if (row == SIZE - 1) position->piece = BLACK;
+            } else if (row == 1 || row == SIZE - 2) {
+                position->piece = 1;
+                if (row == 1) position->colour = WHITE;
+                else if (row == SIZE - 2) position->colour = BLACK;
+            } else {
+                position->piece = 0;
+                position->colour = ZERO;
+            }
+            printf("%d ", position->piece);
+            position->hasPieceMoved = NO;
+            position->empassant.answer = NO;
+            position->empassant.empassantWithRow = -1;
+            position->empassant.empassantWithCol = -1;
         }
+        printf("\n");
     }
 }
 // reset the memory at a specific square
@@ -200,7 +201,7 @@ void print_debug_chessboard() {
             if (col == 0) {
                 printf("%d| ", row + 1);
             }
-            printf("%d.%d ", chessboard[row][col].colour, chessboard[row][col].piece);
+            printf("%d->%d ", chessboard[row][col].colour, chessboard[row][col].piece);
         }
         printf("\n");
     }

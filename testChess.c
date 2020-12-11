@@ -17,24 +17,24 @@ int main(void) {
         col1 = pos1[0] - 'a', row1 = atoi(&pos1[1]) - 1;
         col2 = pos2[0] - 'a', row2 = atoi(&pos2[1]) - 1;
         char colour[10] = "NONE";
-        struct board position1 = chessboard[row1][col1];
-        struct board position2 = chessboard[row2][col2];
+        struct board* position1 = &chessboard[row1][col1];
+        struct board* position2 = &chessboard[row2][col2];
         // struct canEmpassant* empassant = position1.empassant;
-        int colour1 = position1.colour;
+        int colour1 = position1->colour;
         if (colour1 == WHITE) {
             strcpy(colour, "White");
         } else if (colour1 == BLACK) {
             strcpy(colour, "Black");
         }
-        printf("%s %s to %s\n", colour, findPiece(position1.piece), pos2);
+        printf("%s %s to %s\n", colour, findPiece(position1->piece), pos2);
 
         // check if it's a valid move.
         if (isValidMove(row1, col1, row2, col2)) {
-            if (position1.empassant.answer == YES) {                              // if the pawn can empassant
+            if (position1->empassant.answer == YES) {                              // if the pawn can empassant
                 resetPosition(row1, col2);
             }
             position2 = position1;
-            position2.hasPieceMoved = YES;
+            position2->hasPieceMoved = YES;
             resetPosition(row1, col1);
 
         } else {
