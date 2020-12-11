@@ -29,8 +29,8 @@ enum colour {
 
 struct canEmpassant {
     int answer;
-    int empassantWithRow;
-    int empassantWithCol;
+    int withRow;
+    int withCol;
 };
 
 struct board {
@@ -72,6 +72,8 @@ void resetPosition(int row, int col);
 **/ 
 bool canPawnMove(int row1, int col1, int row2, int col2);
 void canAdjacentPawnEmpassant(int colour, int row2, int col2);
+void resetEmpassantStruct(int row, int col);
+
 /**
  * checks if the rook can move to row2, col2.
  * 1. Rook can move vertically or horizontally.
