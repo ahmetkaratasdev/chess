@@ -14,21 +14,17 @@ bool isValidMove(int row1, int col1, int row2, int col2) {
     int piece = chessboard[row1][col1].piece;
     if (piece == PAWN) {
         return canPawnMove(row1, col1, row2, col2);
+    } else if (piece == ROOK) {
+        return canRookMove(row1, col1, row2, col2);
+    } else if (piece == KNIGHT) {
+        return canKnightMove(row1, col1, row2, col2);
+    } else if (piece == BISHOP) {
+        return canBishopMove(row1, col1, row2, col2);
+    } else if (piece == QUEEN) {
+        return canRookMove(row1, col1, row2, col2) ||
+        canBishopMove(row1, col1, row2, col2);
     }
     return false;
-    // } else if (piece == ROOK) {
-    //     return canRookMove();
-    // } else if (piece == 3) {
-    //     return canKnightMove();
-    // } else if (piece == 4) {
-    //     return canBishopMove();
-    // } else if (piece == 5) {
-    //     return canQueenMove();
-    // } else if (piece == 6) {
-    //     return canKingMove();
-    // } else {
-    //     return 0;
-    // }
 }
 
 bool canPawnMove(int row1, int col1, int row2, int col2) {
@@ -56,13 +52,12 @@ bool canPawnMove(int row1, int col1, int row2, int col2) {
                 return true;
             }
         }
-        return false;
-    } else if (colour != position2->colour && row2 == row1 + i && col2 == col1 + i) {             // if it wants to kill an opponent
-        return true;
-    } else if (colour != position2->colour && row2 == row1 + i && col2 == col1 - i) {             // if it wants to kill an opponent
-        return true;
-    } else {
-        return false;
+    } else if (position2->piece != NONE) {
+        if (colour != position2->colour && row2 == row1 + i && col2 == col1 + i) {             // if it wants to kill an opponent
+            return true;
+        } else if (colour != position2->colour && row2 == row1 + i && col2 == col1 - i) {             // if it wants to kill an opponent
+            return true;
+        }
     }
     return false;
 }
@@ -86,62 +81,120 @@ void canAdjacentPawnEmpassant(int colour, int row2, int col2) {
         }
     }
 }
-// bool canRookMove(int row1, int col1, int row2, int col2) {
-//     // if the rook wants to travel vertically
-//     int row, col;
-//     if (col1 == col2) {     // if vertical
-//         if (row2 > row1) {
-//             for (row = row1; row < row2; row++) {
-//                 if (chessboard[row][col1].piece != NONE) {                        // if any of the positions before destination 
-//                     return false;                                           // is not empty, then return false
-//                 }       
-//             }
-//             return true;
-//         } else if (row2 < row1) {
-//             for (row = row2; row > row1; row--) {
-//                 if (chessboard[row][col1].piece != NONE) {                        // if any of the positions before destination 
-//                     return false;                                           // is not empty, then return false
-//                 }       
-//             }
-//             return true;
-//         }
-//     } else if (row1 == row2) {  // if horizontal
-//         if (col2 > col1) {
-//             for (col = col1; col < col2; col++) {
-//                 if (chessboard[row1][col].piece != NONE) {
-//                     return false;
-//                 }
-//             }
-//             return true;
-//         } else if (col2 < col1) {
-//             for (col = col1; col > col2; col++) {
-//                 if (chessboard[row1][col].piece != NONE) {
-//                     return false;
-//                 }
-//             }
-//             return true;
-//         }
-//     } else if (chessboard[row2][col2].piece == KING && !chessboard[row2][col2].KingHasMoved) {
-//         if (col2 > col1) {
-//             for (col = col1 + 1; col < col2; col++) {
-//                 if (chessboard[row1][col].piece != 0) {
-//                     return false;
-//                 }
-//             }
-//             return true;
-//         } else if (col2 < col1) {
-//             for (col = col1 - 1; col > col2; col--) {
-//                 if (chessboard[row1][col].piece != 0) {
-//                     return false;
-//                 }
-//             }
-//             return true;
-//         } else {
-//             return false;
-//         }
+bool canRookMove(int row1, int col1, int row2, int col2) {
+    int row, col;
+    if (chessboard[row1][col1].colour != chessboard[row2][col2].colour) {
+        if (col1 == col2) {     // if vertical
+            if (row2 > row1) {
+                for (row = row1 + 1; row < row2; row++) {
+                    if (chessboard[row][col1].piece != NONE) {                        // if any of the positions before destination 
+                        return false;                                           // is not empty, then return false
+                    }       
+                }
+                return true;
+            } else if (row2 < row1) {
+                for (row = row1 - 1; row > row2; row--) {
+                    if (chessboard[row][col1].piece != NONE) {                        // if any of the positions before destination 
+                        return false;                                           // is not empty, then return false
+                    }       
+                }
+                return true;
+            }
+        } else if (row1 == row2) {  // if horizontal
+            if (col2 > col1) {
+                for (col = col1 + 1; col < col2; col++) {
+                    if (chessboard[row1][col].piece != NONE) {
+                        return false;
+                    }
+                }
+                return true;
+            } else if (col2 < col1) {
+                for (col = col1 - 1; col > col2; col--) {
+                    if (chessboard[row1][col].piece != NONE) {
+                        return false;
+                    }
+                }
+                return true;
+            }
+        }
+    }
+    return false;
+}
+
+bool canBishopMove(int row1, int col1, int row2, int col2) {
+    int colour1 = chessboard[row1][col1].colour;
+    int colour2 = chessboard[row2][col2].colour;
+    int i;
+    // top left
+    if (colour1 != colour2) {
+        if (row2 < row1 && col2 < col1) {
+            for (i = 1; row1 - i > row2 && col1 - i > col2; i++) {
+                if (chessboard[row1 - i][col1 - i].piece != 0) {
+                    return false;
+                }
+            }
+            return true;
+        // top right
+        } else if (row2 < row1 && col2 > col1) {
+            for (i = 1; row1 + i > row2 && col1 + i < col2; i++) {
+                if (chessboard[row1 - i][col1 + i].piece != 0) {
+                    return false;
+                }
+            }
+            return true;
+        // bottom left
+        } else if (row2 > row1 && col2 < col1) {
+            for (i = 1; row1 + i < row2 && col1 - i > col2; i++) {
+                if (chessboard[row1 + i][col1 - i].piece != 0) { 
+                    return false;
+                }
+            }
+            return true;
+        // bottom right
+        } else if (row2 > row1 && col2 > col1) {
+            for (i = 1; row1 + i < row2 && col1 + i < col2; i++) {
+                if (chessboard[row1 + i][col1 + i].piece != 0) {
+                    return false;
+                }
+            }
+            return true;
+        }
+    }
+    return false;
+}
+
+bool canKnightMove(int row1, int col1, int row2, int col2) {
+    if (chessboard[row1][col1].colour == chessboard[row2][col2].colour) {
+        return false;
+    }
+    if (row2 == row1 - 1 && col2 == col1 - 2) {
+        return true;
+    } else if (row2 == row1 - 2 && col2 == col1 - 1) {
+        return true;
+    } else if (row2 == row1 - 2 && col2 == col1 + 1) {
+        return true;
+    } else if (row2 == row1 - 1 && col2 == col1 + 2) {
+        return true;
+    } else if (row2 == row1 + 1 && col2 == col1 + 2) {
+        return true;
+    } else if (row2 == row1 + 2 && col2 == col1 + 1) {
+        return true;
+    } else if (row2 == row1 + 2 && col2 == col1 - 1) {
+        return true;
+    } else if (row2 == row1 + 1 && col2 == col1 - 2) {
+        return true;
+    }
+    return false;
+}
+
+// bool canQueenMove(int row1, int col1, int row2, int col2) {
+//     if (canBishopMove(row1, col1, row2, col2) ||
+//         canRookMove(row1, col1, row2, col2)) {
+//         return true;
 //     }
-//     return true;
+//     return false;
 // }
+
 // Initialise the entire board positions to zero's and the rest of the struct
 void initialiseBoard() {
 
@@ -199,49 +252,6 @@ void print_debug_chessboard() {
         printf("\n");
     }
 }
-// void diagonal(int row, int col) {
-//     int i, topRight = 0, topLeft = 0, bottomRight = 0, bottomLeft = 0;
-//     // top left
-//     printf("Row, col: %d %d\n", row, col);
-//     for (i = 1; row - i >= 0 && col - i >= 0; i++) {
-//         if (chessboard[row - i][col - i].piece != 0) {
-//             printf("Row, col: %d %d\n", row - i, col - i);        
-//             topLeft = 1;
-//            printf("topLeft: %d\n", topLeft);
-//            break;
-//         }
-//     }
-//     // top right
-//     for (i = 1; row - i >= 0 && col + i >= 0; i++) {
-//         if (chessboard[row - i][col + i].piece != 0) {
-//             // bottom right diagonal can attack a piece
-//             topRight = 1;
-//             printf("topRight: %d\n", topRight);
-//             break;
-
-//         }
-//     }
-//     // bottom left
-//     for (i = 1; row + i >= 0 && col - i >= 0; i++) {
-//         if (chessboard[row + i][col - i].piece != 0) { 
-//             // bottom right diagonal can attack a piece
-//             bottomLeft = 1;
-//             printf("bottomLeft: %d\n", bottomLeft);
-//             break;
-
-//         }
-//     }
-//     // bottom right
-//     for (i = 1; row + i >= 0 && col + i >= 0; i++) {
-//         if (chessboard[row + i][col + i].piece != 0) {
-//             // bottom right diagonal can attack a piece
-//             bottomRight = 1;
-//             printf("bottomRight: %d\n", bottomRight);
-//             break;
-//         }
-//     }
-
-// }
 
 char* findPiece(int num) {
     if (num == 0) {

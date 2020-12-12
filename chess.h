@@ -79,7 +79,22 @@ void resetEmpassantStruct(int row, int col);
  * 1. Rook can move vertically or horizontally.
  * 2. Rook can castle with King
 **/ 
-// bool canRookMove(int row1, int col1, int row2, int col2);
+bool canRookMove(int row1, int col1, int row2, int col2);
+
+/**
+ * checks if the bishop can move to row2, col2.
+ * 1. Bishop can move diagonally
+**/ 
+bool canBishopMove(int row1, int col1, int row2, int col2);
+
+/**
+ * checks if the night can move to row2, col2.
+ * 1. Bishop can in an L shape
+**/ 
+bool canKnightMove(int row1, int col1, int row2, int col2);
+
+// bool canQueenMove(int row1, int col1, int row2, int col2);
+
 /**
  * checks if the move is valid 
 **/ 

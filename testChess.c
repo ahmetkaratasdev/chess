@@ -18,7 +18,6 @@ int main(void) {
         char colour[10] = "NONE";
         struct board* position1 = &chessboard[row1][col1];
         struct board* position2 = &chessboard[row2][col2];
-        // struct canEmpassant* empassant = position1.empassant;
         int colour1 = position1->colour;
         int i = 0;
         if (colour1 == WHITE) {
