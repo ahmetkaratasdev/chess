@@ -25,7 +25,6 @@ bool isValidMove(int row1, int col1, int row2, int col2) {
         canBishopMove(row1, col1, row2, col2);
     } else if (piece == KING) {
         return canKingMove(row1, col1, row2, col2);
-        // muahahahahaahahahahahahahahahahahahahahhahaahhaha
     }
     return false;
 }
@@ -228,6 +227,24 @@ bool canKingMove(int row1, int col1, int row2, int col2) {
         
 }
 
+int kingIsChecked(int colour) {
+    int check = 0;
+    for (int row = 0; row < SIZE; row++) {
+        for (int col = 0; col < SIZE; col++) {
+            if (colour == WHITE) {
+                if (isValidMove(row, col, blackKing.row, blackKing.col)) {
+                    check = 1;
+                }
+            } else if (colour == BLACK) {
+                if (isValidMove(row, col, whiteKing.row, whiteKing.col)) {
+                    check = 1;
+                }
+            }
+        }
+    }
+    return check;
+}
+
 // Initialise the entire board positions to EMPTY's and the rest of the struct
 void initialiseBoard() {
 
@@ -254,6 +271,10 @@ void initialiseBoard() {
             position->empassant.withCol = -1;
         }
     }
+    whiteKing.row = 0;
+    whiteKing.col = 4;
+    blackKing.row = SIZE - 1;
+    blackKing.col = 4;
 }
 // reset the memory at a specific square
 void resetPosition(int row, int col) {
@@ -271,7 +292,7 @@ void resetEmpassantStruct(int row, int col) {
 
 
 // prints chessboard for debug
-void print_debug_chessboard() {
+void print_debug_chessboard(struct board curr_board[SIZE][SIZE]) {
     int row, col;
     printf("    A    B    C    D    E    F    G    H\n");
     printf("   ---------------------------------------\n");
@@ -280,7 +301,7 @@ void print_debug_chessboard() {
             if (col == 0) {
                 printf("%d| ", row + 1);
             }
-            printf("%d->%d ", chessboard[row][col].colour, chessboard[row][col].piece);
+            printf("%d->%d ", curr_board[row][col].colour, curr_board[row][col].piece);
         }
         printf("\n");
     }

@@ -40,8 +40,20 @@ struct board {
     struct canEmpassant empassant;
 };
 
+struct blackKingPos {
+    int row;
+    int col;
+};
+
+struct whiteKingPos {
+    int row;
+    int col;
+};
+
 // declare the chessboard
 struct board chessboard[SIZE][SIZE];
+struct whiteKingPos whiteKing;
+struct blackKingPos blackKing;
 
 /**
  * initialises the chess board 
@@ -51,8 +63,7 @@ void initialiseBoard();
 /**
  * Prints the chessboard for debugging
 **/ 
-void print_debug_chessboard();
-
+void print_debug_chessboard(struct board curr_board[SIZE][SIZE]);
 /**
  * Finds the piece which corresponds to the value on the square
 **/ 
@@ -96,6 +107,13 @@ bool canKnightMove(int row1, int col1, int row2, int col2);
 // bool canQueenMove(int row1, int col1, int row2, int col2);
 
 bool canKingMove(int row1, int col1, int row2, int col2);
+
+/**
+ * Goes through every piece on the board to check if any of the pieces can
+ * attack the opposing King with the current board setout
+**/ 
+int kingIsChecked(int colour);
+
 /**
  * checks if the move is valid 
 **/ 
