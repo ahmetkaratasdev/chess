@@ -95,6 +95,7 @@ bool canKnightMove(int row1, int col1, int row2, int col2);
 
 // bool canQueenMove(int row1, int col1, int row2, int col2);
 
+bool canKingMove(int row1, int col1, int row2, int col2);
 /**
  * checks if the move is valid 
 **/ 

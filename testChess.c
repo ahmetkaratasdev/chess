@@ -5,8 +5,6 @@
 #include "chess.h"
 
 int main(void) {
-    // int chessboard[SIZE][SIZE];
-    // struct board* chessboard[SIZE][SIZE];
     initialiseBoard();
     print_debug_chessboard();
 
@@ -38,6 +36,20 @@ int main(void) {
                     resetEmpassantStruct(row, col + 1);
                     resetPosition(row1, col2);
                 }
+
+            // if it's a castle
+            printf("abs(col2 - col1) = %d\n", col2 - col1);
+            } else if (position1->piece == KING && abs(col2 - col1) == 2) {
+                printf("Goes here");
+                if (col2 < col1) {
+                    chessboard[row1][col1 - 1] = chessboard[row1][0];
+                    chessboard[row1][col1 - 1].hasPieceMoved = YES;
+                    resetPosition(row1, 0);
+                } else if (col2 > col1) {
+                    chessboard[row1][col1 + 1] = chessboard[row1][SIZE - 1];
+                    chessboard[row1][col1 + 1].hasPieceMoved = YES;
+                    resetPosition(row1, SIZE - 1);
+                }
             }
             memcpy(position2, position1, sizeof(struct board));
             position2->empassant.withRow = -1;
@@ -51,16 +63,6 @@ int main(void) {
         }
         print_debug_chessboard();
     }
-    // printf("%d %d\n", row1, row1);
-    // int bishopFound = 0;
-    // for (int row = 0; row < SIZE && !bishopFound; row++) {
-    //     for (int col = 0; col < SIZE && !bishopFound; col++) {
-    //         if (chessboard[row][col].piece == BISHOP) {
-    //             diagonal(row, col);
-    //             bishopFound = 1;
-    //         }
-    //     }
-    // }
 }
 
 

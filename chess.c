@@ -23,6 +23,9 @@ bool isValidMove(int row1, int col1, int row2, int col2) {
     } else if (piece == QUEEN) {
         return canRookMove(row1, col1, row2, col2) ||
         canBishopMove(row1, col1, row2, col2);
+    } else if (piece == KING) {
+        return canKingMove(row1, col1, row2, col2);
+        // muahahahahaahahahahahahahahahahahahahahhahaahhaha
     }
     return false;
 }
@@ -37,7 +40,6 @@ bool canPawnMove(int row1, int col1, int row2, int col2) {
     if (colour == WHITE) i = 1;
     else if (colour == BLACK) i = -1;
     // if attempting to empassant
-    // struct canEmpassant empassant = chessboard[row1][col1].empassant;
     if (position1->empassant.answer == YES) {                      // if it can empassant  
         if (position1->empassant.withRow == row2 - i && position1->empassant.withCol == col2) {
             return true;
@@ -187,13 +189,44 @@ bool canKnightMove(int row1, int col1, int row2, int col2) {
     return false;
 }
 
-// bool canQueenMove(int row1, int col1, int row2, int col2) {
-//     if (canBishopMove(row1, col1, row2, col2) ||
-//         canRookMove(row1, col1, row2, col2)) {
-//         return true;
-//     }
-//     return false;
-// }
+bool canKingMove(int row1, int col1, int row2, int col2) {
+    int colour1 = chessboard[row1][col1].colour;
+    int colour2 = chessboard[row2][col2].colour;
+    if ((abs(col2 - col1) <= 1) && (abs(row2 - row1) <= 1)) {
+        if (row1 == row2 && col1 == col2) {
+            return false;
+        }
+        if (colour1 != colour2) {
+            return true;
+        }
+    // if king attempts to castle
+    } else if (row1 == row2 && abs(col2 - col1) == 2) {
+        struct board* position1 = &chessboard[row1][col1];
+        if (col2 < col1) {
+            for (int col = col1 - 1; col > col2; col--) {
+                if (chessboard[row1][col].piece != NONE) {
+                    return false;
+                }
+            }
+            struct board* position2 = &chessboard[row1][0];
+            if (!position1->hasPieceMoved && !position2->hasPieceMoved) {
+                return true;
+            }
+        } else if (col2 > col1) {
+            for (int col = col1 + 1; col < col2; col++) {
+                if (chessboard[row1][col].piece != NONE) {
+                    return false;
+                }
+            }
+            struct board* position2 = &chessboard[row1][SIZE - 1];
+            if (!position1->hasPieceMoved && !position2->hasPieceMoved) {
+                return true;
+            }
+        }
+    }
+    return false;
+        
+}
 
 // Initialise the entire board positions to zero's and the rest of the struct
 void initialiseBoard() {
