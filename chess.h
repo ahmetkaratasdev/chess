@@ -22,7 +22,7 @@ enum chessPiece {
 };
 
 enum colour {
-    ZERO = 0,
+    EMPTY = 0,
     WHITE = 1,
     BLACK = 2,
 };

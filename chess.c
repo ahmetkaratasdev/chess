@@ -228,7 +228,7 @@ bool canKingMove(int row1, int col1, int row2, int col2) {
         
 }
 
-// Initialise the entire board positions to zero's and the rest of the struct
+// Initialise the entire board positions to EMPTY's and the rest of the struct
 void initialiseBoard() {
 
     for (int row = 0; row < SIZE; row++) {
@@ -246,7 +246,7 @@ void initialiseBoard() {
                 else if (row == SIZE - 2) position->colour = BLACK;
             } else {
                 position->piece = 0;
-                position->colour = ZERO;
+                position->colour = EMPTY;
             }
             position->hasPieceMoved = NO;
             position->empassant.answer = NO;
@@ -258,7 +258,7 @@ void initialiseBoard() {
 // reset the memory at a specific square
 void resetPosition(int row, int col) {
     chessboard[row][col].piece = NONE;
-    chessboard[row][col].colour = ZERO;
+    chessboard[row][col].colour = EMPTY;
     resetEmpassantStruct(row, col);
     chessboard[row][col].hasPieceMoved = NO;
 }

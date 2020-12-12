@@ -10,9 +10,17 @@ int main(void) {
 
     char pos1[4], pos2[4];
     int row1, col1, row2, col2;
-    while (scanf("%s %s", pos1, pos2) != EOF) {
+    for (int turn = 1; scanf("%s %s", pos1, pos2) != EOF; turn++) {
         col1 = pos1[0] - 'a', row1 = atoi(&pos1[1]) - 1;
         col2 = pos2[0] - 'a', row2 = atoi(&pos2[1]) - 1;
+
+        int invalidMove = 0;
+        if (turn % 2 == WHITE) {
+            if (chessboard[row1][col1].colour == BLACK) invalidMove = 1;
+        } else if ((turn % 2) + 2 == BLACK) {
+            if (chessboard[row1][col1].colour == WHITE) invalidMove = 1;
+        }
+
         char colour[10] = "NONE";
         struct board* position1 = &chessboard[row1][col1];
         struct board* position2 = &chessboard[row2][col2];
@@ -27,7 +35,7 @@ int main(void) {
         }
         printf("%s %s to %s\n", colour, findPiece(position1->piece), pos2);
         // check if it's a valid move.
-        if (isValidMove(row1, col1, row2, col2)) {
+        if (isValidMove(row1, col1, row2, col2) && !invalidMove) {
             if (position1->empassant.answer == YES) {                              // if the pawn can empassant
                 int row = position1->empassant.withRow;
                 int col = position1->empassant.withCol;
@@ -55,10 +63,15 @@ int main(void) {
             position2->empassant.withRow = -1;
             position2->empassant.withCol = -1;
             position2->hasPieceMoved = YES;
+            // if (check at this postion) {
+            //     // end game
+            // }
             resetPosition(row1, col1);
+
 
         } else {
             printf("The attempted move is not allowed\n");
+            turn--;
 
         }
         print_debug_chessboard();
