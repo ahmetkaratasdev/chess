@@ -308,6 +308,7 @@ void print_debug_chessboard(struct board curr_board[SIZE][SIZE]) {
 }
 
 char* findPiece(int num) {
+    printf("Find piece\n");
     if (num == 0) {
         return "none";
     } else if (num == 1) {
