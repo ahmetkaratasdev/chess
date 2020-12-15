@@ -5,7 +5,8 @@
 #include <stdlib.h>
 #include <string.h>
 #include <stdbool.h>
-#include "chess.h" // The reason we need this is because 
+#include "chess.h" 
+// The reason we need this is because 
 // we need to put the function declarations at the top. However
 // it needs to 
 // The size of the starting grid
@@ -238,18 +239,14 @@ bool isKingChecked(int colour) {
     for (int row = 0; row < SIZE; row++) {
         for (int col = 0; col < SIZE; col++) {
             if (colour == WHITE) {
-                if (row != blackKing.row && col != blackKing.col) {
-                    if (isValidMove(row, col, blackKing.row, blackKing.col)) {
-                        printf("Row: %d, col: %d\n", row, col);
-                        printf("blackKing %d %d\n", blackKing.row, blackKing.col);
-                        return true;
-                    }
+                if (isValidMove(row, col, blackKing.row, blackKing.col)) {
+                    return true;
                 }
+            
             } else if (colour == BLACK) {
-                if (row != whiteKing.row && col != whiteKing.col) {
-                    if (isValidMove(row, col, whiteKing.row, whiteKing.col)) {
-                        return true;
-                    }
+                if (isValidMove(row, col, whiteKing.row, whiteKing.col)) {
+                    return true;
+                    
                 }
             }
         }
@@ -259,7 +256,6 @@ bool isKingChecked(int colour) {
 
 // Initialise the entire board positions to EMPTY's and the rest of the struct
 void initialiseBoard() {
-
     for (int row = 0; row < SIZE; row++) {
         for (int col = 0; col < SIZE; col++) {
             struct board* position = &chessboard[row][col];
@@ -301,7 +297,6 @@ void resetEmpassantStruct(int row, int col) {
     chessboard[row][col].empassant.withRow = -1;
     chessboard[row][col].empassant.withCol = -1;
 }
-
 
 // prints chessboard for debug
 void print_debug_chessboard(struct board curr_board[SIZE][SIZE]) {
