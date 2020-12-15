@@ -89,8 +89,8 @@ int main(void) {
                 printf("Check!\n");
             } else if (isKingChecked(kingsColour)) {
                 print_debug_chessboard(chessboard);
-                printf("Illegal move. King is/will be in check! If both sides believes\n");
-                printf("that it is checkmate, GG\n");
+                printf("Illegal move. King is/will be in check! If both sides\n");
+                printf("believe that it is checkmate, GG :D\n");
                 memcpy(&chessboard, &possibility, sizeof(struct board) * SIZE * SIZE);
                 turn--;
             } 
