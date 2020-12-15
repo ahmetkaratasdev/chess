@@ -66,6 +66,15 @@ int main(void) {
                 }
             }
             memcpy(position2, position1, sizeof(struct board));
+            if (position2->piece == KING) {
+                if (colour1 == WHITE) {
+                    whiteKing.row = row2;
+                    blackKing.col = col2;
+                } else {
+                    blackKing.row = row2;
+                    blackKing.col = col2;
+                }
+            }
             position2->empassant.withRow = -1;
             position2->empassant.withCol = -1;
             position2->hasPieceMoved = YES;
@@ -76,15 +85,15 @@ int main(void) {
             if (colour1 == WHITE) kingsColour = 2;
             if (colour1 == BLACK) kingsColour = 1;
             // IF YOU MAKE A MOVE, BUT YOUR KING IS CHECKED
-            if (isKingChecked(kingsColour)) {
-                printf("Illegal move. King is in check! If both sides believes\n");
-                printf("that it is checkmate. control d\n");
+            if (isKingChecked(colour1)) {
+                printf("Check!\n");
+            } else if (isKingChecked(kingsColour)) {
+                print_debug_chessboard(chessboard);
+                printf("Illegal move. King is/will be in check! If both sides believes\n");
+                printf("that it is checkmate, GG\n");
                 memcpy(&chessboard, &possibility, sizeof(struct board) * SIZE * SIZE);
                 turn--;
             } 
-            // else {
-            //     check = isKingChecked(colour1);
-            // }
     
         } else {
             printf("The attempted move is not allowed\n");

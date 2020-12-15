@@ -12,7 +12,9 @@
 
 bool isValidMove(int row1, int col1, int row2, int col2) {
     int piece = chessboard[row1][col1].piece;
-    if (piece == PAWN) {
+    if (piece == NONE) {
+        return false;
+    } else if (piece == PAWN) {
         return canPawnMove(row1, col1, row2, col2);
     } else if (piece == ROOK) {
         return canRookMove(row1, col1, row2, col2);
@@ -201,8 +203,7 @@ bool canKingMove(int row1, int col1, int row2, int col2) {
     if ((abs(col2 - col1) <= 1) && (abs(row2 - row1) <= 1)) {
         if (row1 == row2 && col1 == col2) {
             return false;
-        }
-        if (colour1 != colour2) {
+        } else if (colour1 != colour2) {
             return true;
         }
     // if king attempts to castle
@@ -237,12 +238,18 @@ bool isKingChecked(int colour) {
     for (int row = 0; row < SIZE; row++) {
         for (int col = 0; col < SIZE; col++) {
             if (colour == WHITE) {
-                if (isValidMove(row, col, blackKing.row, blackKing.col)) {
-                    return true;
+                if (row != blackKing.row && col != blackKing.col) {
+                    if (isValidMove(row, col, blackKing.row, blackKing.col)) {
+                        printf("Row: %d, col: %d\n", row, col);
+                        printf("blackKing %d %d\n", blackKing.row, blackKing.col);
+                        return true;
+                    }
                 }
             } else if (colour == BLACK) {
-                if (isValidMove(row, col, whiteKing.row, whiteKing.col)) {
-                    return true;
+                if (row != whiteKing.row && col != whiteKing.col) {
+                    if (isValidMove(row, col, whiteKing.row, whiteKing.col)) {
+                        return true;
+                    }
                 }
             }
         }
