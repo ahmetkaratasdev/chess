@@ -104,15 +104,13 @@ bool canBishopMove(int row1, int col1, int row2, int col2);
 **/ 
 bool canKnightMove(int row1, int col1, int row2, int col2);
 
-// bool canQueenMove(int row1, int col1, int row2, int col2);
-
 bool canKingMove(int row1, int col1, int row2, int col2);
 
 /**
  * Goes through every piece on the board to check if any of the pieces can
  * attack the opposing King with the current board setout
 **/ 
-int kingIsChecked(int colour);
+bool isKingChecked(int colour);
 
 /**
  * checks if the move is valid 

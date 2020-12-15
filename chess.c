@@ -40,7 +40,7 @@ bool canPawnMove(int row1, int col1, int row2, int col2) {
     else if (colour == BLACK) i = -1;
     // if attempting to empassant
     if (position1->empassant.answer == YES) {                      // if it can empassant  
-        if (position1->empassant.withRow == row2 - i && position1->empassant.withCol == col2) {
+        if (position1->empassant.withRow == row2 && position1->empassant.withCol == col2) {
             return true;
         }
     // if dest is empty and it's the same column
@@ -125,39 +125,46 @@ bool canRookMove(int row1, int col1, int row2, int col2) {
 bool canBishopMove(int row1, int col1, int row2, int col2) {
     int colour1 = chessboard[row1][col1].colour;
     int colour2 = chessboard[row2][col2].colour;
-    int i;
-    // top left
     if (colour1 != colour2) {
+        // top left
         if (row2 < row1 && col2 < col1) {
-            for (i = 1; row1 - i > row2 && col1 - i > col2; i++) {
-                if (chessboard[row1 - i][col1 - i].piece != 0) {
+            row1--, col1--;
+            while (row2 < row1 && col2 < col1) {
+                if (chessboard[row1][col1].piece != 0) {
                     return false;
                 }
+                row1--, col1--;
             }
-            return true;
         // top right
         } else if (row2 < row1 && col2 > col1) {
-            for (i = 1; row1 + i > row2 && col1 + i < col2; i++) {
-                if (chessboard[row1 - i][col1 + i].piece != 0) {
+            row1--, col1++;
+            while (row2 < row1 && col2 > col1) {
+                if (chessboard[row1][col1].piece != 0) {
                     return false;
                 }
+                row1--, col1++;
             }
-            return true;
         // bottom left
         } else if (row2 > row1 && col2 < col1) {
-            for (i = 1; row1 + i < row2 && col1 - i > col2; i++) {
-                if (chessboard[row1 + i][col1 - i].piece != 0) { 
+            row1++, col1--;
+            while (row2 > row1 && col2 < col1) {
+                if (chessboard[row1][col1].piece != 0) { 
                     return false;
                 }
+                row1++, col1--;
             }
-            return true;
+
         // bottom right
         } else if (row2 > row1 && col2 > col1) {
-            for (i = 1; row1 + i < row2 && col1 + i < col2; i++) {
-                if (chessboard[row1 + i][col1 + i].piece != 0) {
+            row1++, col1++;
+            while (row2 > row1 && col2 > col1) {
+                if (chessboard[row1][col1].piece != 0) {
                     return false;
                 }
+                row1++, col1++;
             }
+        }
+        if (row1 == row2 && col1 == col2) {
             return true;
         }
     }
@@ -224,25 +231,23 @@ bool canKingMove(int row1, int col1, int row2, int col2) {
         }
     }
     return false;
-        
 }
 
-int kingIsChecked(int colour) {
-    int check = 0;
+bool isKingChecked(int colour) {
     for (int row = 0; row < SIZE; row++) {
         for (int col = 0; col < SIZE; col++) {
             if (colour == WHITE) {
                 if (isValidMove(row, col, blackKing.row, blackKing.col)) {
-                    check = 1;
+                    return true;
                 }
             } else if (colour == BLACK) {
                 if (isValidMove(row, col, whiteKing.row, whiteKing.col)) {
-                    check = 1;
+                    return true;
                 }
             }
         }
     }
-    return check;
+    return false;
 }
 
 // Initialise the entire board positions to EMPTY's and the rest of the struct
@@ -308,7 +313,6 @@ void print_debug_chessboard(struct board curr_board[SIZE][SIZE]) {
 }
 
 char* findPiece(int num) {
-    printf("Find piece\n");
     if (num == 0) {
         return "none";
     } else if (num == 1) {

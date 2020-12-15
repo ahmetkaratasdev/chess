@@ -1,13 +1,13 @@
 CC = gcc					# Defines the compiler as GCC
 CFLAGS = -Wall -Werror
 testChess: testChess.o chess.o
-	$(CC) $(CFLAGS) testChess.o chess.o -o testChess
+	$(CC) $(CFLAGS) -g testChess.o chess.o -o testChess
 
 chess.o: chess.c chess.h
-	$(CC) $(CFLAGS) chess.c -c -o chess.o
+	$(CC) $(CFLAGS) -g chess.c -c -o chess.o
 
 testChess.o: testChess.c chess.h
-	$(CC) $(CFLAGS) testChess.c -c -o testChess.o
+	$(CC) $(CFLAGS) -g testChess.c -c -o testChess.o
 
 clean: 
 	rm -f *.o output
