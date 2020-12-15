@@ -10,7 +10,7 @@ int main(void) {
 
     char pos1[4], pos2[4];
     int row1, col1, row2, col2;
-    bool check = false;
+    // bool check = false;
     for (int turn = 1; scanf("%s %s", pos1, pos2) != EOF; turn++) {
         col1 = pos1[0] - 'a', row1 = atoi(&pos1[1]) - 1;
         col2 = pos2[0] - 'a', row2 = atoi(&pos2[1]) - 1;
@@ -38,11 +38,11 @@ int main(void) {
         // check if it's a valid move.
         if (isValidMove(row1, col1, row2, col2) && !correctPiece) {
             struct board possibility[SIZE][SIZE];
-            if (check) {
-                memcpy(&possibility, &chessboard, sizeof(struct board) * SIZE * SIZE);
+
+            memcpy(&possibility, &chessboard, sizeof(struct board) * SIZE * SIZE);
                 // printf("Possibilty: \n");
                 // print_debug_chessboard(possibility);
-            } 
+            
 
             if (position1->empassant.answer == YES) {                              // if the pawn can empassant
                 int row = position1->empassant.withRow;
@@ -75,13 +75,16 @@ int main(void) {
             int kingsColour;
             if (colour1 == WHITE) kingsColour = 2;
             if (colour1 == BLACK) kingsColour = 1;
-            if (check && isKingChecked(kingsColour)) {
-                printf("Illegal move. King is in check!\n");
+            // IF YOU MAKE A MOVE, BUT YOUR KING IS CHECKED
+            if (isKingChecked(kingsColour)) {
+                printf("Illegal move. King is in check! If both sides believes\n");
+                printf("that it is checkmate. control d\n");
                 memcpy(&chessboard, &possibility, sizeof(struct board) * SIZE * SIZE);
                 turn--;
-            } else {
-                check = isKingChecked(colour1);
-            }
+            } 
+            // else {
+            //     check = isKingChecked(colour1);
+            // }
     
         } else {
             printf("The attempted move is not allowed\n");
