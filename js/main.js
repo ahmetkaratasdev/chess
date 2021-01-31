@@ -4,26 +4,20 @@
 // and another class which contains all the game logic (the model)
 
 import Game from "./Game.js";
-let game = new Game();                              // create a new game
-console.log(game.turn);
-game.makeMove(0)
-console.log(game.board.join(","));
+import GameView from "./GameView.js";
+let game = new Game(); 
+let gameView = new GameView(document.getElementById("app")); 
 
-console.log(game.turn);
-game.makeMove(3)
-console.log(game.board.join(","));
+gameView.onTileClick = function(i) {
+    game.makeMove(i);
+    gameView.update(game);
+    console.log(`Tile clicked: ${i}`);
+};
 
-console.log(game.turn);
-game.makeMove(1)
-console.log(game.board.join(","));
+gameView.onRestartClick = function() {
+    game = new Game();
+    gameView.update(game);
+    // console.log("Game is restarted!");
+};
 
-console.log(game.turn);
-game.makeMove(4)
-console.log(game.board.join(","));
-
-console.log(game.turn);
-game.makeMove(2)
-console.log(game.board.join(","));
-
-console.log(game.findWinningComb());
-
+gameView.update(game);
