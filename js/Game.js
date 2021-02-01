@@ -22,6 +22,7 @@ const colour = {
 Object.freeze(chessPiece);
 Object.freeze(colour);
 
+// have a canEmpassant struct
 class canEmpassant {
     constructor() {
         this.answer = NO;
@@ -30,13 +31,13 @@ class canEmpassant {
     }
 }
 
+// have a board struct
 class board {
     constructor() {
         this.hasPieceMoved = NO;
         this.piece = chessPiece.NONE;
         this.colour = colour.EMPTY;
         this.empassant = new canEmpassant;
-        
     }
 ;}
 
@@ -44,27 +45,46 @@ export default class Game {
     // A constructor is used to initialise objects
     constructor() {
         this.turn = "White";
-        this.chessboard = [
-
-            [2, 3, 4, 5, 6, 4, 3, 2],
-            [1, 1, 1, 1, 1, 1, 1, 1],
-            [0, 0, 0, 0, 0, 0, 0, 0],
-            [0, 0, 0, 0, 0, 0, 0, 0],
-            [0, 0, 0, 0, 0, 0, 0, 0],
-            [0, 0, 0, 0, 0, 0, 0, 0],
-            [1, 1, 1, 1, 1, 1, 1, 1],
-            [2, 3, 4, 5, 6, 4, 3, 2]
-        ];
+        this.chessboard = new Array(64).fill(new board); 
+        //     [
+        //     [2, 3, 4, 5, 6, 4, 3, 2],
+        //     [1, 1, 1, 1, 1, 1, 1, 1],
+        //     [0, 0, 0, 0, 0, 0, 0, 0],
+        //     [0, 0, 0, 0, 0, 0, 0, 0],
+        //     [0, 0, 0, 0, 0, 0, 0, 0],
+        //     [0, 0, 0, 0, 0, 0, 0, 0],
+        //     [1, 1, 1, 1, 1, 1, 1, 1],
+        //     [2, 3, 4, 5, 6, 4, 3, 2]
+        //     ];
         console.log(colour.WHITE);
         console.log(chessPiece);
+
+        // initialise the fields of the chessboard struct
         for (let row = 0; row < 8; row++) {
             for (let col = 0; col < 8; col++) {
-                if (row == 0 || row == 1) {
-                    chessboard[row][col].colour = colour.WHITE;
-                } else if (row == SIZE - 2 || row == SIZE - 1) {
-                    chessboard[row][col].colour = colour.BLACK;
+                if (row === 0 || row === 1) {
+                    this.chessboard[row][col].colour = colour.WHITE;
+                } else if (row === SIZE - 2 || row === SIZE - 1) {
+                    this.chessboard[row][col].colour = colour.BLACK;
                 } else {
-                    chessboard[row][col].colour = colour.EMPTY;
+                    this.chessboard[row][col].colour = colour.EMPTY;
+                }
+            }
+        }
+
+        // initialise the board pieces
+        for (let row = 0; row < SIZE; row++) {
+            for (let col = 0; col < SIZE; col++) {
+                if (row === 1 || row === SIZE - 2) {
+                    this.chessboard[row][col].piece = 1;
+                } else if (row === 0 || row === size - 1) {
+                    if (col <= 4) {
+                        this.chessboard[row][col].piece = col + 2;
+                    } else {
+                        this.chessboard[row][col].piece = SIZE - col + 1;
+                    }
+                } else {
+                    this.chessboard[row][col].piece = 1;
                 }
             }
         }
