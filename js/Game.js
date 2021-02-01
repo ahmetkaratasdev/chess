@@ -45,7 +45,6 @@ export default class Game {
     // A constructor is used to initialise objects
     constructor() {
         this.turn = "White";
-        this.chessboard = new Array(64).fill(new board); 
         //     [
         //     [2, 3, 4, 5, 6, 4, 3, 2],
         //     [1, 1, 1, 1, 1, 1, 1, 1],
@@ -60,7 +59,10 @@ export default class Game {
         console.log(chessPiece);
 
         // initialise the fields of the chessboard struct
+        let chessboard = [];
         for (let row = 0; row < 8; row++) {
+            this.chessboard[row] = new Array(8).fill(new board);
+            console.log(this.chessboard);
             for (let col = 0; col < 8; col++) {
                 if (row === 0 || row === 1) {
                     this.chessboard[row][col].colour = colour.WHITE;
