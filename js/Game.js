@@ -84,7 +84,7 @@ export default class Game {
                         this.chessboard[row][col].piece = SIZE - col + 1;
                     }
                 } else {
-                    this.chessboard[row][col].piece = 1;
+                    this.chessboard[row][col].piece = 0;
                 }
             }
         }
