@@ -11,9 +11,22 @@ console.log(gameView.root);
 // console.log(game.turn);
 console.log(game.chessboard);
 
+
+let row = 0;
+let col = 0;
 gameView.onTileClick = function(i) {
-    console.log(`Tile clicked: ${i}`);
+    row = Math.floor(i / 8) ;
+    col = i % 8;
+    console.log("First tile clicked:", i);
+
+    // gameView.onTileClick = function(j) {
+    //     console.log("Second tile clicked:", j);
+    // }
+
 }
+
+// gameView.updateBoard(game, row, col);
+
 // console.log(game);
 
 // console.log(game.board)

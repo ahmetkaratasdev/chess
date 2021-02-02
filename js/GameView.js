@@ -90,5 +90,21 @@ export default class gameView {
         })
     }
 
+    // update() {
+    //     this.updateTurn();
+    //     this.updateBoard();
+    // }
+
+    // updateTurn() {
+    //     this.root.querySelector()
+    // }
+
+    // updateBoard(game, row, col) {
+    //     for (let i = 0; i < 64; i++) {
+    //         const tile = this.root.querySelector(`.board__tile[data-index="${i}"]`);
+    //         tile.textContent = game.chessboard[i];
+    //     } 
+    // }
+
 
 }
