@@ -91,6 +91,15 @@ export default class Game {
             }
         }
     }
+    
+
+
+
+
+
+
+
+
 }
 
     // if the current turn is white then make it black and vice versa

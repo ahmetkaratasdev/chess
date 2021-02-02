@@ -2,9 +2,12 @@
 // the view and the logic of the chess application
 
 import Game from "./Game.js";
+import GameView from "./GameView.js";
+
 // When the 'new' term is called, the constructer is called
 let game = new Game();
-console.log(game.turn);
+let gameView = new GameView(document.getElementById("app")); 
+// console.log(game.turn);
 console.log(game.chessboard);
 
 
