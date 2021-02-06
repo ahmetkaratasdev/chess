@@ -2,20 +2,170 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <!-- Viewport is the users visible area of the webpage
-    width=device-width sets the width of the page to follow the width of the device's page
-    nitial-scale=1.0 sets the initial zoom level 
-    -->
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Chess Game</title>
-    <!-- The link tag defines a relationship between two independent files, particularly used for style-->
-    <link rel="stylesheet" href="./css/main.css">
+    <style>
+
+        th {
+            border: none;
+        }
+
+        td {
+            border: 1px solid black;
+            border-collapse: collapse;
+        }
+
+        .black_square {
+            width: 80px;
+            height: 80px;
+            font-size: 60px;
+            text-align: center;
+            background-color:grey
+        }
+
+        .white_square {
+            width: 80px;
+            height: 80px;
+            font-size: 60px;
+            text-align: center;
+            background-color: white;
+        }
+    
+    </style>
+    <!-- <div class="header"></div> -->
+    <!-- <link rel="stylesheet" href="main.css"> -->
 </head>
 <body>
-    <!-- Make a new section with an id of "app" -->
-    <div id="app"></div>
-    <!-- This is where we get the info. think of a main function in a c file,
-    which calls a function from another file -->
-    <script src="./js/main.js" type="module"></script>
+
+    <div class="table">
+        <table>
+            <tr>
+                <th></th>
+                <th>A</th>
+                <th>B</th>
+                <th>C</th>
+                <th>D</th>
+                <th>E</th>
+                <th>F</th>
+                <th>G</th>
+                <th>H</th>
+            </tr>
+            <tr>
+                <th>8</th>
+                <td class="white_square" id="t0">&#9820; </td>
+                <td class="black_square" id="t1">&#9822;</td>
+                <td class="white_square" id="t2">&#9821;</td>
+                <td class="black_square" id="t3">&#9819;</td>
+                <td class="white_square" id="t4">&#9818;</td>
+                <td class="black_square" id="t5">&#9821;</td>
+                <td class="white_square" id="t6">&#9822;</td>
+                <td class="black_square" id="t7">&#9820;</td>
+            </tr>
+
+            <tr>
+                <th>7</th>
+                <td class="black_square" id="t8">&#9823;</td>
+                <td class="white_square" id="t9">&#9823;</td>
+                <td class="black_square" id="t10">&#9823;</td>
+                <td class="white_square" id="t11">&#9823;</td>
+                <td class="black_square" id="t12">&#9823;</td>
+                <td class="white_square" id="t13">&#9823;</td>
+                <td class="black_square" id="t14">&#9823;</td>
+                <td class="white_square" id="t15">&#9823;</td>
+            </tr>
+
+            <tr>
+                <th>6</th>
+                <td class="white_square" id="t16"></td>
+                <td class="black_square" id="t17"></td>
+                <td class="white_square" id="t18"></td>
+                <td class="black_square" id="t19"></td>
+                <td class="white_square" id="t20"></td>
+                <td class="black_square" id="t21"></td>
+                <td class="white_square" id="t22"></td>
+                <td class="black_square" id="t23"></td>
+            </tr>
+
+            <tr>
+                <th>5</th>
+                <td class="black_square" id="t24"></td>
+                <td class="white_square" id="t25"></td>
+                <td class="black_square" id="t26"></td>
+                <td class="white_square" id="t27"></td>
+                <td class="black_square" id="t28"></td>
+                <td class="white_square" id="t29"></td>
+                <td class="black_square" id="t30"></td>
+                <td class="white_square" id="t31"></td>
+            </tr>
+
+            <tr>
+                <th>4</th>
+                <td class="white_square" id="t32"></td>
+                <td class="black_square" id="t33"></td>
+                <td class="white_square" id="t34"></td>
+                <td class="black_square" id="t35"></td>
+                <td class="white_square" id="t36"></td>
+                <td class="black_square" id="t37"></td>
+                <td class="white_square" id="t38"></td>
+                <td class="black_square" id="t39"></td>
+            </tr>
+
+            <tr>
+                <th>3</th>
+                <td class="black_square" id="t40"></td>
+                <td class="white_square" id="t41"></td>
+                <td class="black_square" id="t42"></td>
+                <td class="white_square" id="t43"></td>
+                <td class="black_square" id="t44"></td>
+                <td class="white_square" id="t45"></td>
+                <td class="black_square" id="t46"></td>
+                <td class="white_square" id="t47"></td>
+            </tr>
+
+            <tr>
+                <th>2</th>
+                <td class="white_square" id="t48">&#9817;</td>
+                <td class="black_square" id="t49">&#9817;</td>
+                <td class="white_square" id="t50">&#9817;</td>
+                <td class="black_square" id="t51">&#9817;</td>
+                <td class="white_square" id="t52">&#9817;</td>
+                <td class="black_square" id="t53">&#9817;</td>
+                <td class="white_square" id="t54">&#9817;</td>
+                <td class="black_square" id="t55">&#9817;</td>
+            </tr>
+
+            <tr>
+                <th>1</th>
+                <td class="black_square" id="t56">&#9814;</td>
+                <td class="white_square" id="t57">&#9816;</td>
+                <td class="black_square" id="t58">&#9815;</td>
+                <td class="white_square" id="t59">&#9813;</td>
+                <td class="black_square" id="t60">&#9812;</td>
+                <td class="white_square" id="t61">&#9815;</td>
+                <td class="black_square" id="t62">&#9816;</td>
+                <td class="white_square" id="t63">&#9814;</td>
+            </tr>
+
+            <tr>
+
+            </tr>
+        </table>
+    </div>
+
+    <script>
+        console.log('Start Game');
+        const squares = document.querySelectorAll('.black_square, .white_square');
+
+        squares.forEach(square => {
+            square.addEventListener('click', function() {
+                alert(`The ${square.id} Square Was clicked`);
+            })
+        })
+    
+    </script>
+
+    <!-- <script src="main.js"></script> -->
+
+    
 </body>
 </html>
