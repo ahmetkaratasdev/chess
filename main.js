@@ -25,9 +25,6 @@ function whichTileWasClicked() {
 const movePiece = (e) => {
     const id = e.target.id;
 
-    let row = Math.floor(chosenPieceId / 8) ;
-    let col = chosenPieceId % 8;
-
     if (!chosenPieceId) {
         chosenPieceId = id;
     } else {
