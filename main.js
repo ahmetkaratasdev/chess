@@ -46,7 +46,9 @@ class board {
  
 // initialise the fields of the chessboard struct                           
 let chessboard = [];
-let turn = WHITE;
+let moves = [];
+let colour = WHITE;
+let turn = 0;
 // initialise the board pieces
 for (let row = 0; row < SIZE; row++) {
     chessboard[row] = [];
@@ -92,6 +94,7 @@ function whichTileWasClicked() {
 }
 
 const movePiece = (e) => {
+    console.log(chessboard[6][4]);
     const id = e.target.id;
 
     let row1 = Math.floor(chosenPieceId / 8);
@@ -104,12 +107,12 @@ const movePiece = (e) => {
     let piece = chessboard[row2][col2];
 
     // 1. if a piece has been chosen
-    // 2. if it's the corresponding turn
+    // 2. if it's the corresponding colour
     // 3. If a piece hasn't been selected
     
     console.log('hi', chessboard[3][0].piece, chessboard[3][0].colour);
-    if (piece && !chosenPieceId && piece.colour === turn) { // if trying to move
-        // if (chessboard[row2][col2].colour != turn) {
+    if (piece && !chosenPieceId && piece.colour === colour) { // if trying to move
+        // if (chessboard[row2][col2].colour != colour) {
         console.log(`chosenPieceId: ${chosenPieceId}`);
         chosenPieceId = id;
         console.log(`chosenPieceId: ${chosenPieceId}`);
@@ -117,7 +120,24 @@ const movePiece = (e) => {
     } else if (chosenPieceId) {
         let piece1 = document.getElementById(chosenPieceId);
         if (isValidMove(row1, col1, row2, col2)) {
-            // console.log(`row1 col1, row2, col2: ${row1} ${col1} ${row2} ${col2}`);
+
+            // if (colour === WHITE) moves[turn] = {row1, col1, row2, col2};
+            // else if (colour === BLACK) moves[turn] = ({
+            //     'row1': 7 - row1,
+            //     'col1': col1,
+            //     'row2': 7 - row2,
+            //     'col2': col2
+    
+            // });
+
+            // if (chessboard[row2][col2].piece) {
+            //     let temp = document.getElementById((8 * row2) + col2);
+            //     moves[turn].push({
+            //         'pieceCode': temp.textContent,
+            //         'square': chessboard[row2][col2]
+            //     });
+            // }
+    
             // console.log('bye', chessboard[0][0].piece, chessboard[0][0].colour);
             
             // if a pawn is moving to a different column && destination is empty, 
@@ -141,8 +161,6 @@ const movePiece = (e) => {
             e.target.innerText = piece1.textContent;
             piece1.textContent = null;
 
-
-
             flipBoard();
         } else {
             alert(`invalid move mate. That piece can't move there`);
@@ -152,6 +170,7 @@ const movePiece = (e) => {
     } else {
         alert(`Either the square u selected is empty or u clicked the wrong colour`); 
     }
+    console.log(`turn: ${turn}`);
 }
 
 function isValidMove(row1, col1, row2, col2) {
@@ -182,16 +201,14 @@ function canPawnMove(row1, col1, row2, col2) {
     // if the pawn 
     let position1 = chessboard[row1][col1];
     let position2 = chessboard[row2][col2];
-    let colour = position1.colour;
     let hasPieceMoved = position1.hasPieceMoved;
-    
+    // alert("")
     // if attempting to empassant
     console.log(position1);
     console.log(chessboard[row2][col2]);
     if (position1.empassant.answer === YES) {                      // if it can empassant  
         // console.log(`position1 row: ${position1.empassant.withRow} and col: ${position1.empassant.withCol}`);
         if (position1.empassant.withRow === row2 + 1 && position1.empassant.withCol === col2) {
-            
             return true;
         }
     // if dest is empty and it's the same column
@@ -222,14 +239,14 @@ function canAdjacentPawnEmpassant(row2, col2) {
     // If the there's a pawn to the right of the destination
     // of opposite colour
     if (col2 < SIZE - 1) {                                                  
-        if (positionR.piece === PAWN && positionR.colour != turn) {
+        if (positionR.piece === PAWN && positionR.colour != colour) {
             chessboard[row2][col2 + 1].empassant.answer = YES;
             chessboard[row2][col2 + 1].empassant.withRow = row2;
             chessboard[row2][col2 + 1].empassant.withCol = col2;
         }
     }
     if (col2 > 0) {
-        if (positionL.piece === PAWN && positionL.colour != turn) {
+        if (positionL.piece === PAWN && positionL.colour != colour) {
             chessboard[row2][col2 - 1].empassant.answer = YES;
             chessboard[row2][col2 - 1].empassant.withRow = row2;
             chessboard[row2][col2 - 1].empassant.withCol = col2;
@@ -238,8 +255,9 @@ function canAdjacentPawnEmpassant(row2, col2) {
 }
 
 function flipBoard() {
-    if (turn === WHITE) turn = BLACK;
-    else if (turn === BLACK) turn = WHITE;
+    if (colour === WHITE) colour = BLACK;
+    else if (colour === BLACK) colour = WHITE;
+    turn++;
 
     for (let row = 0; row < SIZE / 2; row++) {
         for (let col = 0; col < SIZE; col++) {
@@ -277,13 +295,13 @@ function print_debug_chessboard(curr_board) {
             if (col == 0) {
                 image += ("%d ", row + 1);
             }
-            if (row === 3 && col === 4) {
-                image += ("%d", curr_board[row][col].empassant.answer,
-                curr_board[row][col].empassant.withRow, 
-                curr_board[row][col].empassant.withCol);
+            // if (row === 3 && col === 4) {
+            //     image += ("%d", curr_board[row][col].piece,
+            //     curr_board[row][col].empassant.withRow, 
+            //     curr_board[row][col].empassant.withCol);
 
-            }
-            image += ("%d", curr_board[row][col].empassant.withRow);
+            // }
+            image += ("%d", curr_board[row][col].colour);
         }
         image += ("\n");
     }
@@ -291,6 +309,37 @@ function print_debug_chessboard(curr_board) {
 }
 
 whichTileWasClicked();
+
+
+// function rewind() {
+//     let col1 = moves[turn - 1]['col1'];
+//     let col2 = moves[turn - 1]['col2'];
+//     var row1, row2;
+//     if (colour === WHITE) {
+//         row1 = moves[turn - 1]['row1'];
+//         row2 = moves[turn - 1]['row2'];
+//     } else {
+//         row1 = 7 - moves[turn - 1]['row1'];
+//         row2 = 7 - moves[turn - 1]['row2'];
+//     }
+//     chessboard[row1][col1] = chessboard[row2][col2];
+//     let piece1 = document.getElementById(8 * row1 + col1);
+//     let piece2 = document.getElementById(8 * row2 + col2);
+//     piece1.textContent = piece2.textContent;
+//     piece2.textContent = moves[turn - 1]['pieceCode'];
+//     chessboard[row1][col1] = moves[turn - 1]['square'];
+//     // if (!chessboard[row2][col2].piece) {
+//     //     chessboard[row2][col2].piece = NONE;
+//     // }
+
+//     turn += -2;
+//     flipBoard();
+
+// }
+
+// function fastForward() {
+// }
+
 
 // if (chosenPieceId && chosenSquareId) {
 //     alert('Trying to move from', chosenPieceId, 'to', chosenSquareId);
