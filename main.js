@@ -119,6 +119,20 @@ const movePiece = (e) => {
         if (isValidMove(row1, col1, row2, col2)) {
             // console.log(`row1 col1, row2, col2: ${row1} ${col1} ${row2} ${col2}`);
             // console.log('bye', chessboard[0][0].piece, chessboard[0][0].colour);
+            
+            // if a pawn is moving to a different column && destination is empty, 
+            if (!piece.piece && col1 != col2) {
+                chessboard[row2 + 1][col2] = new board(NONE, EMPTY, NO);
+                let opposingPawn = document.getElementById((8 * (row2 + 1)) + col2);
+                opposingPawn.textContent = null;
+            }
+
+            // if (chessboard[row1][col1].piece === PAWN) {                        // if the pawn can move and
+            //     if (!piece.piece && chessboard[row + 1][col].piece === PAWN) {  // if it's moving t
+           
+
+            //     }
+            // }
 
             chessboard[row2][col2] = chessboard[row1][col1];
             chessboard[row2][col2].hasPieceMoved = YES;
@@ -126,6 +140,9 @@ const movePiece = (e) => {
             
             e.target.innerText = piece1.textContent;
             piece1.textContent = null;
+
+
+
             flipBoard();
         } else {
             alert(`invalid move mate. That piece can't move there`);
@@ -172,9 +189,9 @@ function canPawnMove(row1, col1, row2, col2) {
     console.log(position1);
     console.log(chessboard[row2][col2]);
     if (position1.empassant.answer === YES) {                      // if it can empassant  
-        alert('this is where it went to');
-        console.log(`position1 row: ${position1.empassant.withRow} and col: ${position1.empassant.withCol}`);
-        if (position1.empassant.withRow === row2 && position1.empassant.withCol === col2) {
+        // console.log(`position1 row: ${position1.empassant.withRow} and col: ${position1.empassant.withCol}`);
+        if (position1.empassant.withRow === row2 + 1 && position1.empassant.withCol === col2) {
+            
             return true;
         }
     // if dest is empty and it's the same column
@@ -183,7 +200,7 @@ function canPawnMove(row1, col1, row2, col2) {
             return true;
         } else if (row1 - row2 === 2 && !hasPieceMoved) {       // if the pawn wnats to move up 2 positions
             if (chessboard[row1 - 1][col1].piece === NONE) {         // if the square in front of it is empty
-                // canAdjacentPawnEmpassant(row2, col2);
+                canAdjacentPawnEmpassant(row2, col2);
                 return true;
             }
         }
@@ -199,26 +216,26 @@ function canPawnMove(row1, col1, row2, col2) {
     return false;
 }
 
-// function canAdjacentPawnEmpassant(row2, col2) {
-//     let positionL = chessboard[row2][col2 - 1];
-//     let positionR = chessboard[row2][col2 + 1];
-//     // If the there's a pawn to the right of the destination
-//     // of opposite colour
-//     if (col2 < SIZE - 1) {                                                  
-//         if (positionR.piece === PAWN && positionR.colour != turn) {
-//             chessboard[row2][col2 + 1].empassant.answer = YES;
-//             chessboard[row2][col2 + 1].empassant.withRow = row2;
-//             chessboard[row2][col2 + 1].empassant.withCol = col2;
-//         }
-//     }
-//     if (col2 > 0) {
-//         if (positionL.piece === PAWN && positionL.colour != turn) {
-//             chessboard[row2][col2 - 1].empassant.answer = YES;
-//             chessboard[row2][col2 - 1].empassant.withRow = row2;
-//             chessboard[row2][col2 - 1].empassant.withCol = col2;
-//         }
-//     }
-// }
+function canAdjacentPawnEmpassant(row2, col2) {
+    let positionL = chessboard[row2][col2 - 1];
+    let positionR = chessboard[row2][col2 + 1];
+    // If the there's a pawn to the right of the destination
+    // of opposite colour
+    if (col2 < SIZE - 1) {                                                  
+        if (positionR.piece === PAWN && positionR.colour != turn) {
+            chessboard[row2][col2 + 1].empassant.answer = YES;
+            chessboard[row2][col2 + 1].empassant.withRow = row2;
+            chessboard[row2][col2 + 1].empassant.withCol = col2;
+        }
+    }
+    if (col2 > 0) {
+        if (positionL.piece === PAWN && positionL.colour != turn) {
+            chessboard[row2][col2 - 1].empassant.answer = YES;
+            chessboard[row2][col2 - 1].empassant.withRow = row2;
+            chessboard[row2][col2 - 1].empassant.withCol = col2;
+        }
+    }
+}
 
 function flipBoard() {
     if (turn === WHITE) turn = BLACK;
@@ -234,6 +251,13 @@ function flipBoard() {
             piece2.textContent = piece3;
 
             // update local chessboard
+
+            // updating empassant.with rows to reflect board flips
+            if (chessboard[row][col].empassant.answer === YES) {
+                chessboard[row][col].empassant.withRow = 7 - row;
+            } else if (chessboard[7 - row][col].empassant.answer === YES) {
+                chessboard[7 - row][col].empassant.withRow = row;
+            }
             temp = chessboard[row][col];
             chessboard[row][col] = chessboard[7 - row][col];
             chessboard[7 - row][col] = temp;
@@ -253,7 +277,13 @@ function print_debug_chessboard(curr_board) {
             if (col == 0) {
                 image += ("%d ", row + 1);
             }
-            image += ("%d", curr_board[row][col].piece);
+            if (row === 3 && col === 4) {
+                image += ("%d", curr_board[row][col].empassant.answer,
+                curr_board[row][col].empassant.withRow, 
+                curr_board[row][col].empassant.withCol);
+
+            }
+            image += ("%d", curr_board[row][col].empassant.withRow);
         }
         image += ("\n");
     }
