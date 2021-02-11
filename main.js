@@ -107,17 +107,19 @@ const movePiece = (e) => {
     console.log(row1, col1, row2, col2);
     // let piece = document.getElementById(chosenPieceId);
 
-    let piece = chessboard[row2][col2];
+    let square1 = chessboard[row1][col1];
+    let square2 = chessboard[row2][col2];
 
-    // 1. if a piece has been chosen
+
+    // 1. if a square2 has been chosen
     // 2. if it's the corresponding colour
-    // 3. If a piece hasn't been selected
+    // 3. If a square2 hasn't been selected
     
     // **************************************** 
-    // If a piece was selected AND it's the first piece chosen
-    // AND the piece's colour is the correct colur
+    // If a square2 was selected AND it's the first square2 chosen
+    // AND the square2's colour is the correct colur
     // ****************************************
-    if (piece && !chosenPieceId && piece.colour === colour) { 
+    if (square2 && !chosenPieceId && square2.colour === colour) { 
         chosenPieceId = id;
         console.log(`chosenPieceId: ${chosenPieceId}`);
         // }
@@ -137,19 +139,21 @@ const movePiece = (e) => {
             console.log(`turn is ${turn}`);
             // **************************************** UPDATE COORDINATES
 
-            // **************************************** IF PIECE IS ATTACKING
-            if (chessboard[row2][col2].piece) {
-                let temp = document.getElementById((8 * row2) + col2);
-                // console.log(moves[turn - 1].piece);
-                moves[turn]['pieceCode'] = temp.textContent;
-                moves[turn]['square'] = chessboard[row2][col2];
-            }
-            // **************************************** IF PIECE IS ATTACKING
+            // **************************************** IF square2 IS ATTACKING
+            // if (chessboard[row2][col2].square2) {
+            let temp = document.getElementById((8 * row2) + col2);
+            // console.log(moves[turn - 1].square2);
+            moves[turn]['pieceCode'] = temp.textContent;
+            moves[turn]['square1'] = chessboard[row1][col1];
+            moves[turn]['square2'] = chessboard[row2][col2];
+            moves[turn]['hasPieceMoved'] = chessboard[row1][col1].hasPieceMoved;
+            // }
+            // **************************************** IF square2 IS ATTACKING
 
             // **************************************** CHESS HISTORY            
             // **************************************** EMPASSANT
             // if a pawn is moving to a different column && destination is empty, 
-            if (!piece.piece && col1 != col2) {
+            if (square1.piece === PAWN && !square2.piece && col1 != col2) {
                 chessboard[row2 + 1][col2] = new board(NONE, EMPTY, NO);
                 let opposingPawn = document.getElementById((8 * (row2 + 1)) + col2);
                 opposingPawn.textContent = null;
