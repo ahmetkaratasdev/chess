@@ -16,3 +16,7 @@ movePiece()
 
 
 ************************************************************************************************
+Rewind()
+
+- if you have rewinded a move and make a new move, that new move
+will now be the most recent move in the game.

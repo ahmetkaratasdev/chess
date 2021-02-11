@@ -137,6 +137,11 @@ const movePiece = (e) => {
                 'col2': col2
             });
             console.log(`turn is ${turn}`);
+            console.log(`moves length is ${moves.length}`);
+
+            for (let i = turn + 1; i < moves.length; i++) {
+                moves[i] = null;
+            }
             // **************************************** UPDATE COORDINATES
 
             // **************************************** IF square2 IS ATTACKING
