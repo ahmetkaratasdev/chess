@@ -153,48 +153,48 @@ function print_debug_chessboard(curr_board) {
 whichTileWasClicked();
 
 
-function rewind() {
-    flipBoard();
-    turn += -2;
-    // alert(turn);
-    print_debug_chessboard(chessboard);
-    console.log(moves[turn]);
-    let col1 = moves[turn]['col1'];
-    let col2 = moves[turn]['col2'];
-    var row1, row2;
-    console.log(colour);
-    if (colour === WHITE) {
-        row1 = moves[turn]['row1'];
-        row2 = moves[turn]['row2'];
-    } else {
-        row1 = 7 - moves[turn]['row1'];
-        row2 = 7 - moves[turn]['row2'];
-    }
+// function rewind() {
+//     flipBoard();
+//     turn += -2;
+//     // alert(turn);
+//     print_debug_chessboard(chessboard);
+//     console.log(moves[turn]);
+//     let col1 = moves[turn]['col1'];
+//     let col2 = moves[turn]['col2'];
+//     var row1, row2;
+//     console.log(colour);
+//     if (colour === WHITE) {
+//         row1 = moves[turn]['row1'];
+//         row2 = moves[turn]['row2'];
+//     } else {
+//         row1 = 7 - moves[turn]['row1'];
+//         row2 = 7 - moves[turn]['row2'];
+//     }
 
-    // *********************************** Get the most recent
-    // *********************************** move and reverse it
-    chessboard[row1][col1] = chessboard[row2][col2];
-    let piece1 = document.getElementById(8 * row1 + col1);
-    let piece2 = document.getElementById(8 * row2 + col2);
-    piece1.textContent = piece2.textContent;
-    piece2.textContent = moves[turn]['pieceCode'];
-    if (turn === 1) {
-        let initialBoard = new newBoard();
-        console.log(chessboard);
-        chessboard[row2][col2].piece = initialBoard[row2][col2].piece;
-    } else {
-        chessboard[row2][col2] = moves[turn]['square'];
-    }
-    // if (!chessboard[row2][col2].piece) {
-    //     chessboard[row2][col2].piece = NONE;
-    // }
+//     // *********************************** Get the most recent
+//     // *********************************** move and reverse it
+//     chessboard[row1][col1] = chessboard[row2][col2];
+//     let piece1 = document.getElementById(8 * row1 + col1);
+//     let piece2 = document.getElementById(8 * row2 + col2);
+//     piece1.textContent = piece2.textContent;
+//     piece2.textContent = moves[turn]['pieceCode'];
+//     if (turn === 1) {
+//         let initialBoard = new newBoard();
+//         console.log(chessboard);
+//         chessboard[row2][col2].piece = initialBoard[row2][col2].piece;
+//     } else {
+//         chessboard[row2][col2] = moves[turn]['square'];
+//     }
+//     // if (!chessboard[row2][col2].piece) {
+//     //     chessboard[row2][col2].piece = NONE;
+//     // }
 
-    // print_debug_chessboard(chessboard);
+//     // print_debug_chessboard(chessboard);
 
-    // *********************************** Get the most recent
-    // *********************************** move and reverse it
+//     // *********************************** Get the most recent
+//     // *********************************** move and reverse it
 
-}
+// }
 
 // function fastForward() {
 // }
@@ -210,3 +210,21 @@ function rewind() {
 //     console.log("alright");
 //     alert(`The ${square.id} Square Was clicked`);
 // }
+function rewind() {
+    flipBoard();
+    turn += -2;
+    console.log(`turn: ${turn}`);
+    let row1 = moves[turn]['row1'];
+    let col1 = moves[turn]['col1'];
+    let row2 = moves[turn]['row2'];
+    let col2 = moves[turn]['col2'];
+    chessboard[row1][col1] = chessboard[row2][col2];
+    chessboard[row1][col1].hasPieceMoved = NO;
+    chessboard[row2][col2] = new board(NONE, EMPTY, NO);
+
+    let piece1 = document.getElementById(8 * row1 + col1);
+    let piece2 = document.getElementById(8 * row2 + col2);
+    piece1.textContent = piece2.textContent;
+    piece2.textContent = null;
+
+}
