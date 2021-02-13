@@ -17,7 +17,6 @@ const WHITE = 1;
 const BLACK = 2;
 
 
-
 // have a board struct
 class board {
     constructor(piece, colour, hasPieceMoved) {
@@ -75,8 +74,7 @@ function newBoard() {
                 }
             } else {
                 chessboard[row][col] = new board(NONE, EMPTY, NO);
-            }
-            
+            }          
         }
     }
 }
@@ -85,10 +83,9 @@ new newBoard();
 console.log('Start Game');
     // console.log(chessboard);
     
-// what I understand from this is if any of the squares is clicked, put an alert and return squares id
 let chosenPieceId = null;
 
-// The bridge between the user leterface and the javascript code lies in this function
+// The bridge between the user interface and the javascript code lies in this function
 function whichTileWasClicked() {
     const squares = document.querySelectorAll('.black_square, .white_square');
     for (let i = 0; i < squares.length; i++) {
@@ -107,24 +104,29 @@ const movePiece = (e) => {
     console.log(row1, col1, row2, col2);
     // let piece = document.getElementById(chosenPieceId);
 
+        
     let square1 = chessboard[row1][col1];
     let square2 = chessboard[row2][col2];
-
-
-    // 1. if a square2 has been chosen
-    // 2. if it's the corresponding colour
-    // 3. If a square2 hasn't been selected
-    
     // **************************************** 
     // If a square2 was selected AND it's the first square2 chosen
     // AND the square2's colour is the correct colur
     // ****************************************
     if (square2 && !chosenPieceId && square2.colour === colour) { 
+        let piece1 = document.getElementById(id);
+        // Make the square turn green as soon as you click it
+        // override the a:hover function
+        if (id % 2 === 0) piece1.classList.remove("white_square");
+        else piece1.classList.remove("black_square");
+        piece1.classList.add("square_selected");
+
         chosenPieceId = id;
         console.log(`chosenPieceId: ${chosenPieceId}`);
         // }
     } else if (chosenPieceId) {
         let piece1 = document.getElementById(chosenPieceId);
+        piece1.classList.remove("square_selected");
+        if (chosenPieceId % 2 === 0) piece1.classList.add("white_square");
+        else piece1.classList.add("black_square"); 
         if (isValidMove(row1, col1, row2, col2)) {
 
             // **************************************** CHESS HISTORY
@@ -137,22 +139,19 @@ const movePiece = (e) => {
                 'col2': col2
             });
             console.log(`turn is ${turn}`);
-            console.log(`moves length is ${moves.length}`);
-
+            // **************************************** 
+            // Incase history is trying to be rewritten
             for (let i = turn + 1; i < moves.length; i++) {
                 moves[i] = null;
             }
-            // **************************************** UPDATE COORDINATES
+            // **************************************** 
 
             // **************************************** IF square2 IS ATTACKING
-            // if (chessboard[row2][col2].square2) {
             let temp = document.getElementById((8 * row2) + col2);
-            // console.log(moves[turn - 1].square2);
             moves[turn]['pieceCode'] = temp.textContent;
             moves[turn]['square1'] = chessboard[row1][col1];
             moves[turn]['square2'] = chessboard[row2][col2];
             moves[turn]['hasPieceMoved'] = chessboard[row1][col1].hasPieceMoved;
-            // }
             // **************************************** IF square2 IS ATTACKING
 
             // **************************************** CHESS HISTORY            
