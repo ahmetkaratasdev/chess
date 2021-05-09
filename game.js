@@ -27,6 +27,9 @@ function canPawnMove(row1, col1, row2, col2) {
     let position1 = chessboard[row1][col1];
     let position2 = chessboard[row2][col2];
     let hasPieceMoved = position1.hasPieceMoved;
+    var i;
+    if (colour === WHITE) i = - 1;
+    else i = 1;
 
     // if attempting to empassant
     console.log(position1);
@@ -40,26 +43,30 @@ function canPawnMove(row1, col1, row2, col2) {
     // if dest is empty and it's the same column
     // *****************************************
     } else if (position2.piece === NONE && col1 === col2) { 
-        if (row1 - row2 === 1) {                                 // if the pawn wants to move up 1 position
+        // alert('hi');
+        if (Math.abs(row2 - row1) === 1) {                                 // if the pawn wants to move up 1 position
             return true;
-        } else if (row1 - row2 === 2 && !hasPieceMoved) {       // if the pawn wnats to move up 2 positions
-            if (chessboard[row1 - 1][col1].piece === NONE) {         // if the square in front of it is empty
-                canAdjacentPawnEmpassant(row2, col2);
+        } else if (Math.abs(row2 - row1) === 2 && !hasPieceMoved) {       // if the pawn wnats to move up 2 positions
+            if (chessboard[row1 + i][col1].piece === NONE) {         // if the square in front of it is empty
+                // canAdjacentPawnEmpassant(row2, col2);
                 return true;
             }
         }
+
+    // else if I'm trying to attack a piece
     } else if (position2.piece != NONE) {
         console.log(`colour 1 and position2.colour: ${colour} and ${position2.colour}`);
         // print_debug_chessboard(chessboard);
-        if (colour != position2.colour && row2 === row1 - 1 && col2 === col1 - 1) {             // if it wants to kill an opponent
+        if (colour != position2.colour && row2 === row1 + i && col2 === col1 + i) {             // if it wants to kill an opponent
             return true;
-        } else if (colour != position2.colour && row2 === row1 - 1 && col2 === col1 + 1) {             // if it wants to kill an opponent
+        } else if (colour != position2.colour && row2 === row1 + i && col2 === col1 - i) {             // if it wants to kill an opponent
             return true;
         }
     }
     return false;
 }
 
+// function which checks if a particular column can empassant or not
 function canAdjacentPawnEmpassant(row2, col2) {
     let positionL = chessboard[row2][col2 - 1];
     let positionR = chessboard[row2][col2 + 1];
@@ -200,6 +207,8 @@ function flipBoard() {
     else if (colour === BLACK) colour = WHITE;
     turn++; // update turn
     var row, col;
+
+    // update the board vertically
     for (row = 0; row < SIZE / 2; row++) {
         for (col = 0; col < SIZE; col++) {
             // update HTML browser
@@ -223,6 +232,7 @@ function flipBoard() {
         }
     }
 
+        // update the board horiztonally
     for (row = 0; row < SIZE; row++) {
         for (col = 0; col < SIZE / 2; col++) {
             // update HTML browser
@@ -274,7 +284,7 @@ whichTileWasClicked();
 function rewind() {
     console.log(`turn is ${turn}`);
     if (turn > 0) {
-        flipBoard();
+        // flipBoard();
         print_debug_chessboard(chessboard);
         turn += -2;
         let col1 = moves[turn]['col1'];

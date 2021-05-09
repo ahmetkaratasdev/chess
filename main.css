@@ -7,6 +7,22 @@ td {
     border-collapse: collapse;
 }
 
+.frame {
+    display: flex;
+}
+
+.table {
+    padding-right: 4rem;
+    text-align: center;
+}
+
+.buttons {
+    display: flex;
+    justify-content: left;
+    /* padding-left: 2rem; */
+}
+
+
 .black_square {
     width: 80px;
     height: 80px;

@@ -80,9 +80,6 @@ function newBoard() {
 }
     
 new newBoard();
-console.log('Start Game');
-    // console.log(chessboard);
-    
 let chosenPieceId = null;
 
 // The bridge between the user interface and the javascript code lies in this function
@@ -94,39 +91,40 @@ function whichTileWasClicked() {
 }
 
 const movePiece = (e) => {
-    console.log(chessboard[6][4]);
     const id = e.target.id;
-
+    
     let row1 = Math.floor(chosenPieceId / 8);
     let col1 = chosenPieceId % 8;
     let row2 = Math.floor(id / 8);
     let col2 = id % 8;
-    console.log(row1, col1, row2, col2);
-    // let piece = document.getElementById(chosenPieceId);
-
-        
+    
+    const duplicateId1 = 8 * (7 - row1) + (7 - col1) + 64
+    const duplicateId2 = 8 * (7 - row2) + (7 - col2) + 64
+    // redeclare the local chessboard
     let square1 = chessboard[row1][col1];
     let square2 = chessboard[row2][col2];
     // **************************************** 
-    // If a square2 was selected AND it's the first square2 chosen
-    // AND the square2's colour is the correct colur
+    // If square2 was selected AND it's the first square chosen
+    // AND square2's colour is the correct colur
     // ****************************************
     if (square2 && !chosenPieceId && square2.colour === colour) { 
         let piece1 = document.getElementById(id);
         // Make the square turn green as soon as you click it
         // override the a:hover function
-        if (id % 2 === 0) piece1.classList.remove("white_square");
-        else piece1.classList.remove("black_square");
+        // if (id % 2 === 0) piece1.classList.remove("white_square");
+        // else piece1.classList.remove("black_square");
         piece1.classList.add("square_selected");
-
         chosenPieceId = id;
-        console.log(`chosenPieceId: ${chosenPieceId}`);
-        // }
+
     } else if (chosenPieceId) {
         let piece1 = document.getElementById(chosenPieceId);
+        
+        let duplicatePiece1 = document.getElementById(chosenPieceId + 64);
+
         piece1.classList.remove("square_selected");
-        if (chosenPieceId % 2 === 0) piece1.classList.add("white_square");
-        else piece1.classList.add("black_square"); 
+        // if (chosenPieceId % 2 === 0) piece1.classList.add("white_square");
+        // else piece1.classList.add("black_square"); 
+        // alert('hello');
         if (isValidMove(row1, col1, row2, col2)) {
 
             // **************************************** CHESS HISTORY
@@ -138,7 +136,7 @@ const movePiece = (e) => {
                 'row2': 7 - row2,
                 'col2': col2
             });
-            console.log(`turn is ${turn}`);
+            // console.log(`turn is ${turn}`);
             // **************************************** 
             // Incase history is trying to be rewritten
             for (let i = turn + 1; i < moves.length; i++) {
@@ -157,32 +155,47 @@ const movePiece = (e) => {
             // **************************************** CHESS HISTORY            
             // **************************************** EMPASSANT
             // if a pawn is moving to a different column && destination is empty, 
-            if (square1.piece === PAWN && !square2.piece && col1 != col2) {
-                chessboard[row2 + 1][col2] = new board(NONE, EMPTY, NO);
-                let opposingPawn = document.getElementById((8 * (row2 + 1)) + col2);
-                opposingPawn.textContent = null;
-            }
-            // **************************************** EMPASSANT
+            // What if it's black??? wouldn't it be row - 1?
+            // if (square1.piece === PAWN && !square2.piece && col1 != col2) {
+            //     chessboard[row2 + 1][col2] = new board(NONE, EMPTY, NO);
+            //     let opposingPawn = document.getElementById((8 * (row2 + 1)) + col2);
+            //     opposingPawn.textContent = null;
+            // }
+            // // **************************************** EMPASSANT
 
             // **************************************** UPDATE CHESSBOARD
             chessboard[row2][col2] = chessboard[row1][col1];
             chessboard[row2][col2].hasPieceMoved = YES;
-            chessboard[row1][col1] = new board(NONE, EMPTY, NO);
+            chessboard[row1][col1] = new board(NONE, square1.colour, NO);
             
             // **************************************** UPDATE BROWSER BOARD
-            e.target.innerText = piece1.textContent;
-            piece1.textContent = null;
+            document.getElementById(id).innerHTML = piece1.textContent;
+            document.getElementById(duplicateId2).innerHTML = piece1.textContent;
 
-            flipBoard();
+            piece1.textContent = null;
+            document.getElementById(duplicateId1).innerHTML = null;
+            // duplicatePiece1.textContent = null;
+
+
+            if (colour === WHITE) colour = BLACK;
+            else if (colour === BLACK) colour = WHITE;
+            turn++; // update turn
+            // alert(square1.colour);
+
+
         } else {
             alert(`invalid move mate. That piece can't move there`);
         }
         chosenPieceId = null;
         print_debug_chessboard(chessboard);
+
+
     } else {
-        // print_debug_chessboard(chessboard);
         alert(`Either the square u selected is empty or u clicked the wrong colour`); 
     }
+
+
+
     console.log(`turn: ${turn}`);
 }
 
