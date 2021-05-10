@@ -81,7 +81,7 @@ function newBoard() {
     
 new newBoard();
 let chosenPieceId = null;
-
+var row1, col1, row2, col2;
 // The bridge between the user interface and the javascript code lies in this function
 function whichTileWasClicked() {
     const squares = document.querySelectorAll('.black_square, .white_square');
@@ -91,23 +91,69 @@ function whichTileWasClicked() {
 }
 
 const movePiece = (e) => {
+    // alert(null + 4);
     const id = e.target.id;
     
-    let row1 = Math.floor(chosenPieceId / 8);
-    let col1 = chosenPieceId % 8;
-    let row2 = Math.floor(id / 8);
-    let col2 = id % 8;
     
-    const duplicateId1 = 8 * (7 - row1) + (7 - col1) + 64
-    const duplicateId2 = 8 * (7 - row2) + (7 - col2) + 64
+
+    if (id < 64) { 
+        if (chosenPieceId) {
+            if (chosenPieceId >= 64) {
+                alert('squares selected must be on the same board');
+            } else {
+                row2 = Math.floor(id / 8);
+                col2 = id % 8; 
+            }
+        } else {
+            row1 = Math.floor(id / 8);
+            col1 = id % 8;
+        }
+
+    } else {
+        if (chosenPieceId) {
+            if (chosenPieceId < 64) {
+                alert('squares selected must be on the same board');
+            } else {
+                row2 = Math.floor((id - 64) / 8);
+                col2 = (id - 64) % 8;
+            }
+        } else {  
+            // alert('hi');
+            row1 = Math.floor((id - 64) / 8);
+            col1 = (id - 64) % 8;   
+        }
+    }
+    // alert(row1 + ' ' + col1 + ' ' + row2 + ' ' + col2);
+
+    console.log(row1 + ' ' + col1 + ' ' + row2 + ' ' + col2);
+
+    var duplicateId1, duplicateId2;
+    // if (chosenPieceId && chosenPieceId < 64 && id < 64) {
+    if (colour == WHITE) {
+        duplicateId1 = 8 * (7 - row1) + (7 - col1) + 64;
+        duplicateId2 = 8 * (7 - row2) + (7 - col2) + 64;
+    } else {
+        duplicateId1 = (127 - chosenPieceId);
+        duplicateId2 = (127 - id);
+    }
+
+    // } else if (chosenPieceId && chosenPieceId >= 64 && id >= 64) {
+    //     duplicateId1 = 8 * (7 - row1) + (7 - col1) + 64
+    //     duplicateId2 = 8 * (7 - row2) + (7 - col2) + 64
+
+    // }
     // redeclare the local chessboard
-    let square1 = chessboard[row1][col1];
-    let square2 = chessboard[row2][col2];
+
+    var square1, square2;
+    square1 = chessboard[row1][col1];
+    if (row2 && col2) square2 = chessboard[row2][col2];
+    else square2 = null;
     // **************************************** 
     // If square2 was selected AND it's the first square chosen
     // AND square2's colour is the correct colur
     // ****************************************
-    if (square2 && !chosenPieceId && square2.colour === colour) { 
+    if (square1 && !chosenPieceId && square1.colour === colour) {
+        console.log("COMES HERE");
         let piece1 = document.getElementById(id);
         // Make the square turn green as soon as you click it
         // override the a:hover function
@@ -169,17 +215,20 @@ const movePiece = (e) => {
             chessboard[row1][col1] = new board(NONE, square1.colour, NO);
             
             // **************************************** UPDATE BROWSER BOARD
+            // UPDATE FIRST BOARD
             document.getElementById(id).innerHTML = piece1.textContent;
             document.getElementById(duplicateId2).innerHTML = piece1.textContent;
-
-            piece1.textContent = null;
+            
+            // UPDATE SECOND BOARD
             document.getElementById(duplicateId1).innerHTML = null;
             // duplicatePiece1.textContent = null;
+            piece1.textContent = null;
+            print_debug_chessboard(chessboard);
 
-
-            if (colour === WHITE) colour = BLACK;
-            else if (colour === BLACK) colour = WHITE;
-            turn++; // update turn
+            flipBoard();
+            // if (colour === WHITE) colour = BLACK;
+            // else if (colour === BLACK) colour = WHITE;
+            // turn++; // update turn
             // alert(square1.colour);
 
 
@@ -188,6 +237,7 @@ const movePiece = (e) => {
         }
         chosenPieceId = null;
         print_debug_chessboard(chessboard);
+        // flipBoard();
 
 
     } else {
