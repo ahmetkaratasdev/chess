@@ -11,14 +11,32 @@ td {
     display: flex;
 }
 
-.table {
-    padding-right: 4rem;
-    text-align: center;
+.sidebar {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 6rem;
+    height: 47rem;
+    background-color: lightgrey;
 }
 
+.table {
+    padding-left: 1rem;
+    padding-right: 4rem;
+    text-align: center;
+
+}
+
+.title {
+    font-size: 40px;
+    color: silver;
+    background-color: lightblue;
+}
+
+
 .buttons {
-    display: flex;
-    justify-content: left;
+    /* align-items: flex-end; */
+    justify-content: center;
     /* padding-left: 2rem; */
 }
 

@@ -10,8 +10,12 @@
 </head>
 <body>
     <div class="frame">
+        <div class="sidebar">
+            <button onclick="rewind()">&#9194</button>
+            <button onclick="fastForward()">&#9193</button>
+        </div>
         <div class="table">
-            <h1>White</h1>
+            <div id="c1" style="color:black;" class="title">White's Turn</div>
             <table>
                 <tr>
                     <th></th>
@@ -120,13 +124,10 @@
                     <td class="white_square" id="63">&#9814;</td>
                 </tr>
             </table>
-
-            <button class="buttons" onclick="rewind()">Rewind</button>
-            <button class="buttons" onclick="fastForward()">Fast Forward</button>
         </div>
 
         <div class="table">
-            <h1>Black</h1>
+            <div id="c2" class="title">Black's Turn</div>
             <table>
                 <tr>
                     <th></th>
@@ -236,9 +237,6 @@
                     <td class="white_square" id="127">&#9820;</td>
                 </tr>
             </table>
-
-            <button class="buttons" onclick="rewind()">Rewind</button>
-            <button class="buttons" onclick="fastForward()">Fast Forward</button>
         </div>
     </div>
     <script src="main.js"></script>

@@ -94,8 +94,6 @@ const movePiece = (e) => {
     // alert(null + 4);
     const id = e.target.id;
     
-    
-
     if (id < 64) { 
         if (chosenPieceId) {
             if (chosenPieceId >= 64) {
@@ -172,16 +170,26 @@ const movePiece = (e) => {
         // else piece1.classList.add("black_square"); 
         // alert('hello');
         if (isValidMove(row1, col1, row2, col2)) {
+       
+
+
 
             // **************************************** CHESS HISTORY
             // **************************************** UPDATE COORDINATES
-            if (colour === WHITE) moves[turn] = {row1, col1, row2, col2};
-            else if (colour === BLACK) moves[turn] = ({
+            if (colour === WHITE) {
+                document.getElementById("c1").style.color = "silver";
+                document.getElementById("c2").style.color = "black";
+                moves[turn] = {row1, col1, row2, col2};
+            } else if (colour === BLACK) {
+                document.getElementById("c1").style.color = "black";
+                document.getElementById("c2").style.color = "silver";
+                moves[turn] = ({
                 'row1': 7 - row1,
                 'col1': col1,
                 'row2': 7 - row2,
                 'col2': col2
-            });
+                });
+            }
             // console.log(`turn is ${turn}`);
             // **************************************** 
             // Incase history is trying to be rewritten
