@@ -91,10 +91,10 @@ function whichTileWasClicked() {
 }
 
 const movePiece = (e) => {
-    // alert(null + 4);
     const id = e.target.id;
     
-    if (id < 64) { 
+    // if chosen from the first chessboard, obtain the corresponding row and column
+    if (id < 64 && colour === WHITE) { 
         if (chosenPieceId) {
             if (chosenPieceId >= 64) {
                 alert('squares selected must be on the same board');
@@ -107,7 +107,8 @@ const movePiece = (e) => {
             col1 = id % 8;
         }
 
-    } else {
+    // if chosen from the second chessboard, obtain the corresponding row and column
+    } else if (id >= 64 && colour === BLACK) {
         if (chosenPieceId) {
             if (chosenPieceId < 64) {
                 alert('squares selected must be on the same board');
@@ -120,99 +121,84 @@ const movePiece = (e) => {
             row1 = Math.floor((id - 64) / 8);
             col1 = (id - 64) % 8;   
         }
+    } else {
+        alert("Player must select square from appropriate board");
+        return;
     }
-    // alert(row1 + ' ' + col1 + ' ' + row2 + ' ' + col2);
 
-    console.log(row1 + ' ' + col1 + ' ' + row2 + ' ' + col2);
-
+    // if chessboard 1 is chosen, get the corresponding element id in the second chessboard
     var duplicateId1, duplicateId2;
-    // if (chosenPieceId && chosenPieceId < 64 && id < 64) {
     if (colour == WHITE) {
         duplicateId1 = 8 * (7 - row1) + (7 - col1) + 64;
         duplicateId2 = 8 * (7 - row2) + (7 - col2) + 64;
+
+    // if chessboard 2 is chosen, get the corresponding element id in the first chessboard
     } else {
         duplicateId1 = (127 - chosenPieceId);
         duplicateId2 = (127 - id);
     }
-
-    // } else if (chosenPieceId && chosenPieceId >= 64 && id >= 64) {
-    //     duplicateId1 = 8 * (7 - row1) + (7 - col1) + 64
-    //     duplicateId2 = 8 * (7 - row2) + (7 - col2) + 64
-
-    // }
-    // redeclare the local chessboard
 
     var square1, square2;
     square1 = chessboard[row1][col1];
     if (row2 && col2) square2 = chessboard[row2][col2];
     else square2 = null;
     // **************************************** 
-    // If square2 was selected AND it's the first square chosen
-    // AND square2's colour is the correct colur
+    // If a sqaure was selected AND it's the first square chosen
+    // AND the square's colour is the correct colur
     // ****************************************
     if (square1 && !chosenPieceId && square1.colour === colour) {
-        console.log("COMES HERE");
         let piece1 = document.getElementById(id);
-        // Make the square turn green as soon as you click it
-        // override the a:hover function
-        // if (id % 2 === 0) piece1.classList.remove("white_square");
-        // else piece1.classList.remove("black_square");
         piece1.classList.add("square_selected");
         chosenPieceId = id;
 
     } else if (chosenPieceId) {
         let piece1 = document.getElementById(chosenPieceId);
-        
-        let duplicatePiece1 = document.getElementById(chosenPieceId + 64);
-
         piece1.classList.remove("square_selected");
-        // if (chosenPieceId % 2 === 0) piece1.classList.add("white_square");
-        // else piece1.classList.add("black_square"); 
-        // alert('hello');
+
         if (isValidMove(row1, col1, row2, col2)) {
-       
-
-
-
             // **************************************** CHESS HISTORY
-            // **************************************** UPDATE COORDINATES
             if (colour === WHITE) {
+                i = -1;
                 document.getElementById("c1").style.color = "silver";
                 document.getElementById("c2").style.color = "black";
-                moves[turn] = {row1, col1, row2, col2};
+                // moves[turn] = {row1, col1, row2, col2};
             } else if (colour === BLACK) {
+                i = 1;
                 document.getElementById("c1").style.color = "black";
                 document.getElementById("c2").style.color = "silver";
-                moves[turn] = ({
-                'row1': 7 - row1,
-                'col1': col1,
-                'row2': 7 - row2,
-                'col2': col2
-                });
+                // moves[turn] = ({
+                //     'row1': 7 - row1,
+                //     'col1': col1,
+                //     'row2': 7 - row2,
+                //     'col2': col2
+                // });
             }
-            // console.log(`turn is ${turn}`);
+            // **************************************** UPDATE COORDINATES
             // **************************************** 
             // Incase history is trying to be rewritten
-            for (let i = turn + 1; i < moves.length; i++) {
-                moves[i] = null;
-            }
+            // for (let i = turn + 1; i < moves.length; i++) {
+            //     moves[i] = null;
+            // }
             // **************************************** 
 
             // **************************************** IF square2 IS ATTACKING
-            let temp = document.getElementById((8 * row2) + col2);
-            moves[turn]['pieceCode'] = temp.textContent;
-            moves[turn]['square1'] = chessboard[row1][col1];
-            moves[turn]['square2'] = chessboard[row2][col2];
-            moves[turn]['hasPieceMoved'] = chessboard[row1][col1].hasPieceMoved;
+            // let temp = document.getElementById((8 * row2) + col2);
+            // moves[turn]['pieceCode'] = temp.textContent;
+            // moves[turn]['square1'] = chessboard[row1][col1];
+            // moves[turn]['square2'] = chessboard[row2][col2];
+            // moves[turn]['hasPieceMoved'] = chessboard[row1][col1].hasPieceMoved;
             // **************************************** IF square2 IS ATTACKING
 
-            // **************************************** CHESS HISTORY            
+            // **************************************** CHESS HISTORY     
+
             // **************************************** EMPASSANT
             // if a pawn is moving to a different column && destination is empty, 
             // What if it's black??? wouldn't it be row - 1?
+            
             // if (square1.piece === PAWN && !square2.piece && col1 != col2) {
-            //     chessboard[row2 + 1][col2] = new board(NONE, EMPTY, NO);
-            //     let opposingPawn = document.getElementById((8 * (row2 + 1)) + col2);
+            //     alert("you made it");
+            //     chessboard[row2 + i][col2] = new board(NONE, EMPTY, NO);
+            //     let opposingPawn = document.getElementById((8 * (row2 + i)) + col2);
             //     opposingPawn.textContent = null;
             // }
             // // **************************************** EMPASSANT
@@ -220,24 +206,16 @@ const movePiece = (e) => {
             // **************************************** UPDATE CHESSBOARD
             chessboard[row2][col2] = chessboard[row1][col1];
             chessboard[row2][col2].hasPieceMoved = YES;
-            chessboard[row1][col1] = new board(NONE, square1.colour, NO);
+            chessboard[row1][col1] = new board(NONE, EMPTY, NO);
             
             // **************************************** UPDATE BROWSER BOARD
-            // UPDATE FIRST BOARD
+            // UPDATE FIRST AND SECOND BOARS
             document.getElementById(id).innerHTML = piece1.textContent;
             document.getElementById(duplicateId2).innerHTML = piece1.textContent;
             
-            // UPDATE SECOND BOARD
             document.getElementById(duplicateId1).innerHTML = null;
-            // duplicatePiece1.textContent = null;
             piece1.textContent = null;
-            print_debug_chessboard(chessboard);
-
             flipBoard();
-            // if (colour === WHITE) colour = BLACK;
-            // else if (colour === BLACK) colour = WHITE;
-            // turn++; // update turn
-            // alert(square1.colour);
 
 
         } else {
@@ -251,9 +229,6 @@ const movePiece = (e) => {
     } else {
         alert(`Either the square u selected is empty or u clicked the wrong colour`); 
     }
-
-
-
     console.log(`turn: ${turn}`);
 }
 

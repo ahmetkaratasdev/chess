@@ -32,12 +32,14 @@ function canPawnMove(row1, col1, row2, col2) {
     // else i = 1;
 
     // if attempting to empassant
-    console.log(position1);
-    console.log(chessboard[row2][col2]);
     // ****************************************
     if (position1.empassant.answer === YES) {                      // if it can empassant  
-        alert(`position1 row: ${position1.empassant.withRow} and col: ${position1.empassant.withCol}`);
-        if (position1.empassant.withRow === row2 + 1 && position1.empassant.withCol === col2) {
+        // alert(`position1 row: ${position1.empassant.withRow} and col: ${position1.empassant.withCol}`);
+        // If white is playing, empassant with row will be row2 + 1, col2
+        // If black is playing, empassant with row will be row2 - 1, col2
+        if (colour === WHITE) i = 1
+        else i = -1
+        if (position1.empassant.withRow === row2 + i && position1.empassant.withCol === col2) {
             return true;
         }
     // if dest is empty and it's the same column
@@ -48,7 +50,15 @@ function canPawnMove(row1, col1, row2, col2) {
             return true;
         } else if (Math.abs(row2 - row1) === 2 && !hasPieceMoved) {       // if the pawn wnats to move up 2 positions
             if (chessboard[row1 - 1][col1].piece === NONE) {         // if the square in front of it is empty
-                // canAdjacentPawnEmpassant(row2, col2);
+                canAdjacentPawnEmpassant(row2, col2);
+                // for (let r = 0; r < 8; r++) {
+                //     for (let c = 0; c < 8; c++) {
+                //         if (chessboard[r][c].empassant.answer === YES) {
+                //             console.log("row and col: " + r + ' ' + c + ' empassant with row: ' + chessboard[r][c].empassant.withRow + ', with col: ' + chessboard[r][c].empassant.withCol);
+                //         }
+                //     }
+                // }
+                // print_debug_chessboard(chessboard);
                 return true;
             }
         }
@@ -72,18 +82,23 @@ function canAdjacentPawnEmpassant(row2, col2) {
     let positionR = chessboard[row2][col2 + 1];
     // If the there's a pawn to the right of the destination
     // of opposite colour
+    console.log("what is happening");
+    console.log("col2 is ", col2);
     if (col2 < SIZE - 1) {                                                  
         if (positionR.piece === PAWN && positionR.colour != colour) {
-            chessboard[row2][col2 + 1].empassant.answer = YES;
-            chessboard[row2][col2 + 1].empassant.withRow = row2;
-            chessboard[row2][col2 + 1].empassant.withCol = col2;
+            alert("hi")
+            chessboard[row2][(col2 + 1)].empassant.answer = YES;
+            chessboard[row2][(col2 + 1)].empassant.withRow = row2;
+            chessboard[row2][(col2 + 1)].empassant.withCol = col2;
         }
     }
     if (col2 > 0) {
         if (positionL.piece === PAWN && positionL.colour != colour) {
-            chessboard[row2][col2 - 1].empassant.answer = YES;
-            chessboard[row2][col2 - 1].empassant.withRow = row2;
-            chessboard[row2][col2 - 1].empassant.withCol = col2;
+            alert("bye")
+
+            chessboard[row2][(col2 - 1)].empassant.answer = YES;
+            chessboard[row2][(col2 - 1)].empassant.withRow = row2;
+            chessboard[row2][(col2 - 1)].empassant.withCol = col2;
         }
     }
 }
@@ -131,8 +146,9 @@ function canRookMove(row1, col1, row2, col2) {
 function canBishopMove(row1, col1, row2, col2) {
     colour1 = chessboard[row1][col1].colour;
     colour2 = chessboard[row2][col2].colour;
+
     if (colour1 != colour2) {
-        // top left
+
         if (row2 < row1 && col2 < col1) {
             row1--, col1--;
             while (row2 < row1 && col2 < col1) {
@@ -169,10 +185,13 @@ function canBishopMove(row1, col1, row2, col2) {
                 }
                 row1++, col1++;
             }
+        } else {
+            return false;
         }
-        if (row1 == row2 && col1 == col2) {
-            return true;
-        }
+        // if (row1 == row2 && col1 == col2) {
+
+        return true;
+        // }
     }
     return false;
 }
@@ -208,6 +227,14 @@ function flipBoard() {
     turn++; // update turn
     var row, col;
 
+    // for (let r = 0; r < 8; r++) {
+    //     for (let c = 0; c < 8; c++) {
+    //         if (chessboard[r][c].empassant.answer === YES) {
+    //             console.log("row and col: " + r + ' ' + c + ' empassant with row: ' + chessboard[r][c].empassant.withRow + ', with col: ' + chessboard[r][c].empassant.withCol);
+    //         }
+    //     }
+    // }
+
     // update the board vertically
     for (row = 0; row < SIZE / 2; row++) {
         for (col = 0; col < SIZE; col++) {
@@ -222,39 +249,77 @@ function flipBoard() {
 
             // updating empassant.with rows to reflect board flips
             // if (chessboard[row][col].empassant.answer === YES) {
-            //     chessboard[row][col].empassant.withRow = 7 - row;
+            //     chessboard[7 - row][col].empassant.withRow = 7 - row;
             // } else if (chessboard[7 - row][col].empassant.answer === YES) {
             //     chessboard[7 - row][col].empassant.withRow = row;
             // }
+            // if (chessboard[row][col].empassant.answer === YES) {
+            //     chessboard[row][col].empassant.withRow = 7 - row;
+            //     alert("done")
+            // }
+            console.log("row and col: " + row + ' ' + col + ' empassant with row: ' + chessboard[row][col].empassant.withRow + ', with col: ' + chessboard[row][col].empassant.withCol);
+
             temp = chessboard[row][col];
-            chessboard[row][col] = chessboard[7 - row][col];
-            chessboard[7 - row][col] = temp;
+            // temp.empassant.withRow = 7 - chessboard[row][col].empassant.withRow
+            // temp.empassant.withCol = 7 - chessboard[row][col].empassant.withCol
+
+            chessboard[row][col] = chessboard[7 - row][7 - col];
+            if (7 - row === 4 && 7 - col === 4) {
+                console.log("chessboard is ", chessboard);
+            }
+            chessboard[7 - row][7 - col] = temp;
+            console.log("row and col: " + row + ' ' + col + ' empassant with row: ' + chessboard[row][col].empassant.withRow + ', with col: ' + chessboard[row][col].empassant.withCol);
+
+
+
+
         }
     }
 
         // update the board horiztonally
-    for (row = 0; row < SIZE; row++) {
-        for (col = 0; col < SIZE / 2; col++) {
-            // update HTML browser
-            // let piece1 = document.getElementById((8 * row) + col);
-            // let piece2 = document.getElementById(8 * row + (7 - col));
-            // let piece3 = piece1.textContent;
-            // piece1.textContent = piece2.textContent;
-            // piece2.textContent = piece3;
+    // for (row = 0; row < SIZE; row++) {
+    //     for (col = 0; col < SIZE / 2; col++) {
+    //         // update HTML browser
+    //         // let piece1 = document.getElementById((8 * row) + col);
+    //         // let piece2 = document.getElementById(8 * row + (7 - col));
+    //         // let piece3 = piece1.textContent;
+    //         // piece1.textContent = piece2.textContent;
+    //         // piece2.textContent = piece3;
 
-            // update local chessboard
+    //         // update local chessboard
+    //         // updating empassant.with cols to reflect board flips
+    
+    //         // } else if (chessboard[7 - row][col].empassant.answer === YES) {
+    //         //     chessboard[7 - row][col].empassant.withRow = row;
+    //         // }
+    //         temp = chessboard[row][col];
+    //         chessboard[row][col] = chessboard[row][7 - col];
+    //         chessboard[row][7 - col] = temp;
+    //         // if (chessboard[row][col].empassant.answer === YES) {
+    //         //     chessboard[row][col].empassant.withCol = 7 - col;
+    //         //     alert("woo");
+    //         // }
+    //     }
+    // }
 
-            // updating empassant.with rows to reflect board flips
-            // if (chessboard[row][col].empassant.answer === YES) {
-            //     chessboard[row][col].empassant.withRow = 7 - row;
-            // } else if (chessboard[7 - row][col].empassant.answer === YES) {
-            //     chessboard[7 - row][col].empassant.withRow = row;
-            // }
-            temp = chessboard[row][col];
-            chessboard[row][col] = chessboard[row][7 - col];
-            chessboard[row][7 - col] = temp;
-        }
-    }
+    // for (let r = 0; r < 4; r++) {
+    //     for (let c = 0; c < 8; c++) {
+    //         if (chessboard[r][c].empassant.answer === YES) {
+    //             chessboard[r][c].empassant.withRow = r;
+    //             // chessboard[r][c].empassant.withCol = 7 - c;
+    //             // console.log("row and col: " + r + ' ' + c + ' empassant with row: ' + chessboard[r][c].empassant.withRow + ', with col: ' + chessboard[r][c].empassant.withCol);
+    //         }
+    //     }
+    // }
+
+    // for (let r = 0; r < 8; r++) {
+    //     for (let c = 0; c < 4; c++) {
+    //         if (chessboard[r][c].empassant.answer === YES) {
+    //             chessboard[r][c].empassant.withCol = c;
+    //             chessboard[r][c].empassant.withCol = 7 - c;
+    //         }
+    //     }
+    // }
 
 }
 
@@ -285,7 +350,7 @@ function rewind() {
     console.log(`turn is ${turn}`);
     if (turn > 0) {
         // flipBoard();
-        print_debug_chessboard(chessboard);
+        // print_debug_chessboard(chessboard);
         turn += -2;
         let col1 = moves[turn]['col1'];
         let col2 = moves[turn]['col2'];
@@ -306,7 +371,7 @@ function rewind() {
         let piece2 = document.getElementById(8 * row2 + col2);
         piece1.textContent = piece2.textContent;
         piece2.textContent = moves[turn]['pieceCode'];
-        print_debug_chessboard(chessboard);
+        // print_debug_chessboard(chessboard);
     } else {
         alert("Reached the earliest move");
     }
